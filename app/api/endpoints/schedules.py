@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.repositories.citas import ScheduleRepository
+from app.repositories.schedules import ScheduleRepository
 from app.schemas.schemas import ScheduleCreate, ScheduleResponse
 from app.core.database import get_db
 from sqlalchemy.orm import Session
@@ -15,6 +15,6 @@ router = APIRouter(prefix="/v1/schedules", tags=["schedules"])
     status_code=201
 )
 
-def create_schedule(cita: ScheduleCreate, db: Session = Depends(get_db)):
+def create_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db)):
     repo = ScheduleRepository(db)
-    return repo.create_schedule(cita.dict())
+    return repo.create_schedule(schedule.dict())

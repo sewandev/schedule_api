@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     CORS_HEADERS: list = ["*"]
     
     # Configuración de la base de datos
-    DATABASE_URL: str = "sqlite:///./schedule.db"
+    DATABASE_URL: str = "sqlite:///./schedules.db"
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10

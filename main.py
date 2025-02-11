@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
-from app.api.endpoints import citas
+from app.api.endpoints import schedules
 from app.core.config import settings
 from app.models.models import Patient, Medic, Schedule
 
-# Crear las tablas en la base de datos SQLite si no existen "citas.db"
+# Crear las tablas en la base de datos SQLite si no existen "schedules.db"
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -24,7 +24,7 @@ app.add_middleware(
 )
 
 # Registrar el router de citas
-app.include_router(citas.router)
+app.include_router(schedules.router)
 
 if __name__ == "__main__":
     import uvicorn
