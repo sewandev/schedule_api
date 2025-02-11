@@ -1,25 +1,26 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from app.core.database import Base
 
-class Paciente(Base):
-    __tablename__ = "pacientes"
+class Patient(Base):
+    __tablename__ = "patients"
     
     id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(100))
+    name = Column(String(100))
     email = Column(String(100), unique=True)
 
-class Medico(Base):
-    __tablename__ = "medicos"
+class Medic(Base):
+    __tablename__ = "medics"
     
     id = Column(Integer, primary_key=True, index=True)
-    nombre = Column(String(100))
-    especialidad = Column(String(50))
+    name = Column(String(100))
+    specialty = Column(String(50))
 
-class Cita(Base):
-    __tablename__ = "citas"
+class Schedule(Base):
+    __tablename__ = "schedules"
     
     id = Column(Integer, primary_key=True, index=True)
-    paciente_id = Column(Integer, ForeignKey("pacientes.id")) 
-    medico_id = Column(Integer, ForeignKey("medicos.id"))  
-    fecha_hora = Column(DateTime)
-    estado = Column(String(20), default="pendiente")
+    patient_id = Column(Integer, ForeignKey("patients.id")) 
+    medic_id = Column(Integer, ForeignKey("medics.id"))  
+    initial_date = Column(DateTime)
+    final_date = Column(DateTime)
+    status = Column(String(20), default="pending")

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     CORS_HEADERS: list = ["*"]
     
     # Configuración de la base de datos
-    DATABASE_URL: str = "sqlite:///./citas.db"
+    DATABASE_URL: str = "sqlite:///./schedule.db"
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     LOG_FILE: str = "app.log"
     
     # Configuración de testing
-    TEST_DATABASE_URL: str = "sqlite:///./test_citas.db"
+    TEST_DATABASE_URL: str = "sqlite:///./test_schedule.db"
     TESTING: bool = False
     
     class Config:

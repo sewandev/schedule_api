@@ -1,20 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
-from app.repositories.citas import CitaRepository
-from app.schemas.schemas import CitaCreate, CitaResponse
+from app.repositories.citas import ScheduleRepository
+from app.schemas.schemas import ScheduleCreate, ScheduleResponse
 from app.core.database import get_db
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/v1/citas", tags=["citas"])
+router = APIRouter(prefix="/v1/schedules", tags=["schedules"])
 
 @router.post(
     "/",
-    response_model=CitaResponse,
+    response_model=ScheduleResponse,
     description="Crea una nueva cita médica",
     summary="Crear cita",
     response_description="Cita creada exitosamente",
     status_code=201
 )
 
-def crear_cita(cita: CitaCreate, db: Session = Depends(get_db)):
-    repo = CitaRepository(db)
-    return repo.create_cita(cita.dict())
+def create_schedule(cita: ScheduleCreate, db: Session = Depends(get_db)):
+    repo = ScheduleRepository(db)
+    return repo.create_schedule(cita.dict())

@@ -1,16 +1,16 @@
 from sqlalchemy.orm import Session
-from app.models.models import Cita
+from app.models.models import Schedule
 
-class CitaRepository:
+class ScheduleRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_cita(self, cita_id: int):
-        return self.db.query(Cita).filter(Cita.id == cita_id).first()
+    def get_schedule(self, schedule_id: int):
+        return self.db.query(Schedule).filter(Schedule.id == schedule_id).first()
 
-    def create_cita(self, cita_data: dict):
-        nueva_cita = Cita(**cita_data)
-        self.db.add(nueva_cita)
+    def create_schedule(self, schedule_data: dict):
+        new_schedule = Schedule(**schedule_data)
+        self.db.add(new_schedule)
         self.db.commit()
-        self.db.refresh(nueva_cita)
-        return nueva_cita
+        self.db.refresh(new_schedule)
+        return new_schedule

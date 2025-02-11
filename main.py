@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 from app.api.endpoints import citas
 from app.core.config import settings
-from app.models.models import Paciente, Medico, Cita
+from app.models.models import Patient, Medic, Schedule
 
 # Crear las tablas en la base de datos SQLite si no existen "citas.db"
 Base.metadata.create_all(bind=engine)

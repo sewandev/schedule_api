@@ -1,14 +1,16 @@
 from pydantic import BaseModel
 from datetime import datetime
 
-class CitaCreate(BaseModel):
-    paciente_id: int
-    medico_id: int
-    fecha_hora: datetime
+class ScheduleCreate(BaseModel):
+    patient_id: int
+    medic_id: int
+    initial_date: datetime
+    final_date: datetime
 
-class CitaResponse(CitaCreate):
+
+class ScheduleResponse(ScheduleCreate):
     id: int
-    estado: str
+    status: str
 
     class Config:
         from_attributes = True
