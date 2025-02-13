@@ -8,6 +8,8 @@
    ```bash
    git clone https://github.com/sewandev/reserva-hora-api.git
    cd reserva-hora-api
+   python -m venv venv # Opcional para crear un entorno virutal
+   venv\\Scripts\\activate  # Si se crea el entorno virtual, se debe activar
    pip install -r requirements.txt
    ```
 
@@ -16,6 +18,13 @@
     ```bash
     uvicorn main:app --reload
     ```
+
+4. Documentación una vez iniciado el servidor
+
+   ```bash
+   http://127.0.0.1:8000/docs # Swagger
+   http://127.0.0.1:8000/redoc # Redoc
+   ```
 
 ## Arbol de carpetas actual
 
