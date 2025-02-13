@@ -1,4 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession # Es una sesión asíncrona de SQLAlchemy para interactuar con la base de datos de manera no bloqueante.
+from sqlalchemy.exc import NoResultFound # Excepción que se lanza cuando no se encuentra un resultado en una consulta.
 from sqlalchemy import select, and_ # Funciones de SQLAlchemy para construir consultas SQL.
 from app.models.models import Appointment, AvailableSlot # Modelos de la base de datos que representan las tablas de citas y slots disponibles.
 from app.schemas.appointments import AppointmentCreate # Esquema de validación para la creación de citas.
@@ -24,13 +25,10 @@ class AppointmentRepository:
             # SQL equivalente: SELECT * FROM available_slot WHERE medic_id = medic_id AND start_time = start_time AND end_time = end_time AND is_reserved = FALSE;
         )
         slot_result = slot.scalar()
-
-        # Si no se encuentra un slot disponible, lanza una excepción que se mostrará en la respuesta de la API.
+        
+        # Si no se encuentra un slot disponible, lanza una excepción.
         if not slot_result:
-            raise ValueError(
-                f"Slot not available for medic_id={data.medic_id}, "
-                f"start_time={data.start_time}, end_time={data.end_time}"
-            )
+            raise NoResultFound("Slot not available")  # Excepción específica
         
         # Crear la cita
         new_appointment = Appointment(**data.model_dump())

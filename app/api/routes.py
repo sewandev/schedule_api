@@ -1,17 +1,17 @@
 from fastapi import APIRouter
-from app.api.endpoints import appointments
+from app.api.endpoints import appointments, upload_schedules
 
 api_router = APIRouter()
 
 # Configuración unificada del router
 api_router.include_router(
     appointments.router,
-    prefix="/appointments",  # Prefijo único
-    tags=["Appointments Management"]  # Mismo tag que en el endpoint
+    prefix="/appointments",
+    tags=["Appointments Management"]
 )
 
 api_router.include_router(
-    appointments.router,
-    prefix="/otra",  # Prefijo único
-    tags=["Appointments otra"]  # Mismo tag que en el endpoint
+    upload_schedules.router,
+    prefix="/upload-schedules",
+    tags=["Upload Schedules"]
 )

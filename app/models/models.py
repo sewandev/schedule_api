@@ -1,7 +1,18 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.core.database import Base
+
+'''
+Ventajas de usar ORM (Object-Relational Mapping):
+
+Abstracción: No necesitas escribir SQL manualmente.
+Seguridad: Previene vulnerabilidades como la inyección SQL.
+Legibilidad: El código es más claro y fácil de mantener.
+Productividad: Reduce la cantidad de código repetitivo.
+Relaciones: Facilita el manejo de relaciones entre tablas.
+Migraciones: Simplifica la evolución del esquema de la base de datos.
+'''
 
 class Patient(Base):
     __tablename__ = "patients"
@@ -18,7 +29,7 @@ class Medic(Base):
     full_name: Mapped[str] = mapped_column(String(100), nullable=False)
     specialty: Mapped[str] = mapped_column(String(50), nullable=False)
     available_slots: Mapped[list["AvailableSlot"]] = relationship(back_populates="medic")
-    appointments: Mapped[list["Appointment"]] = relationship(back_populates="medic")  # Agregado
+    appointments: Mapped[list["Appointment"]] = relationship(back_populates="medic")
 
 class Appointment(Base):
     __tablename__ = "appointments"
@@ -29,6 +40,8 @@ class Appointment(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     status: Mapped[str] = mapped_column(String(20), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now().timestamp())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, onupdate=datetime.now().timestamp())
     
     patient: Mapped["Patient"] = relationship(back_populates="appointments")
     medic: Mapped["Medic"] = relationship(back_populates="appointments")
@@ -41,7 +54,7 @@ class AvailableSlot(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     is_reserved: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[datetime] = mapped_column(DateTime, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now().timestamp())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, onupdate=datetime.now().timestamp())
     
     medic: Mapped["Medic"] = relationship(back_populates="available_slots")
