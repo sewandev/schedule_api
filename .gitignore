@@ -187,3 +187,4 @@ Thumbs.db
 .env
 *.log
 appointments.db
+.vscode
