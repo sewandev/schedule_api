@@ -1,17 +1,24 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.services.appointments import create_new_appointment
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.appointments import AppointmentCreate, AppointmentResponse
+from app.services.appointments import AppointmentService
 from app.core.database import get_db
 
-router = APIRouter(prefix="/v1/appointments", tags=["appointments"])
+router = APIRouter()
 
-@router.post("/", response_model=AppointmentResponse)
+@router.post(
+    "/",
+    response_model=AppointmentResponse,
+    status_code=201,
+    summary="Create new appointment",
+    tags=["Appointments Management"],
+    responses={
+        201: {"description": "Appointment created successfully"},
+        409: {"description": "Time slot not available"}
+    }
+)
 async def create_appointment(
-    appointment: AppointmentCreate,
-    db: Session = Depends(get_db),
+    data: AppointmentCreate,
+    db: AsyncSession = Depends(get_db)
 ):
-    try:
-        return await create_new_appointment(appointment, db)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+    return await AppointmentService.create_appointment(data, db)

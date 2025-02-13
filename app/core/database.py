@@ -1,32 +1,31 @@
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.pool import NullPool
 from app.core.config import settings
+from typing import AsyncGenerator
 
-# Global metadata configuration
-metadata = MetaData()
+Base = declarative_base()
 
-# Declarative Base
-class Base(DeclarativeBase):
-    metadata = metadata
+engine = create_async_engine(
+    settings.DATABASE_URL,     # ← Ahora usa SQLAlchemy async
+    echo=settings.DATABASE_ECHO,
+    pool_size=settings.DATABASE_POOL_SIZE,
+    max_overflow=settings.DATABASE_MAX_OVERFLOW
+)
 
-# Database engine
-engine = create_engine(settings.DATABASE_URL, connect_args={"check_same_thread": False})
+AsyncSessionLocal = sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
-# Session factory
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Database dependency
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-# Test database connection
-def test_connection():
-    try:
-        with engine.connect() as connection:
-            print("Database connection successful!")
-    except Exception as e:
-        print(f"Database connection failed: {e}")
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with AsyncSessionLocal() as session:
+        try:
+            yield session
+            await session.commit()
+        except Exception:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
