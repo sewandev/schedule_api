@@ -5,14 +5,15 @@ from app.core.database import engine, Base
 from app.core.config import settings
 from app.api.routes import api_router
 
+# Decorador y método asincrónico que se encarga de crear las tablas de la BD cada vez que se inicia la aplicación
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Crear tablas solo en desarrollo (no usar en producción)
     if settings.ENVIRONMENT == "development":
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
     yield
-
+    
+# Creación de la aplicación FastAPI
 app = FastAPI(
     title=settings.APP_TITLE,
     description=settings.APP_DESCRIPTION,
