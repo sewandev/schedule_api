@@ -18,6 +18,7 @@ class Medic(Base):
     full_name: Mapped[str] = mapped_column(String(100), nullable=False)
     specialty: Mapped[str] = mapped_column(String(50), nullable=False)
     available_slots: Mapped[list["AvailableSlot"]] = relationship(back_populates="medic")
+    appointments: Mapped[list["Appointment"]] = relationship(back_populates="medic")  # Agregado
 
 class Appointment(Base):
     __tablename__ = "appointments"
