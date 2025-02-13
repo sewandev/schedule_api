@@ -50,6 +50,23 @@
 ├── 📄 main.py                    # Punto de entrada de la aplicación (inicia el servidor o la app).
 ```
 
+## Para realizar pruebas iniciales con [Postman](https://www.postman.com/downloads/) o [HTTPie](https://httpie.io/desktop)
+
+```bash
+Ruta: http://localhost:8000/api/v1/appointments/
+Tipo: POST
+Headers: Content-Type: application/json
+JSON:
+
+{
+  "patient_id": 1,
+  "medic_id": 1,
+  "start_time": "2023-10-10T09:00:00",
+  "end_time": "2023-10-10T10:30:00"
+}
+
+```
+
 ## Relizar debug de API
 
 1. Crear un launch.son en vscode
