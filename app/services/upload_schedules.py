@@ -7,7 +7,7 @@ class UploadSchedulesService:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def upload_available_schedules(self, file: bytes, filename: str, content_type: str):
+    async def upload_schedules(self, file: bytes, filename: str, content_type: str):
         """
         Procesa un archivo Excel para cargar horarios disponibles.
         

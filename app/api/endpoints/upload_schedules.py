@@ -18,7 +18,7 @@ router = APIRouter()
     }
 )
 async def upload_schedules(
-    file: UploadFile = File(...),  # Recibe el archivo .xlsx
+    file: UploadFile = File(..., max_size=5_000_000),  # Límite de 5 MB
     db: AsyncSession = Depends(get_db)
 ):
     """
@@ -35,4 +35,4 @@ async def upload_schedules(
     
     # Llamar al servicio para procesar el archivo
     service = UploadSchedulesService(db)
-    return await service.upload_schedules(contents, file.filename)
+    return await service.upload_schedules(contents, file.filename, file.content_type)
