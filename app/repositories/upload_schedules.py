@@ -1,5 +1,4 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import IntegrityError
 from app.models.models import AvailableSlot
 from datetime import datetime
 
@@ -18,9 +17,6 @@ class UploadSchedulesRepository:
         
         Returns:
             AvailableSlot: El slot creado.
-        
-        Raises:
-            IntegrityError: Si hay un conflicto con los datos (por ejemplo, un slot duplicado).
         """
         new_slot = AvailableSlot(
             medic_id=medic_id,
