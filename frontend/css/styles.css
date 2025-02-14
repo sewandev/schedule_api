@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f7fa;
+}
+
+.navbar {
+    background-color: #007acc;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 0;
+    color: #007acc;
+}
+
+.calendar-container {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.arrow {
+    font-size: 24px;
+    color: #007acc;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.calendar {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.calendar div {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    background-color: white;
+    color: #007acc;
+    position: relative;
+    margin: 0 2px;
+    flex: 1;
+}
+
+.calendar div.active {
+    background-color: #007acc;
+    color: white;
+}
+
+.calendar div.active::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #007acc;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.appointment {
+    border-top: 2px solid #007acc;
+    padding-top: 15px;
+}
+
+.appointment h3 {
+    color: #007acc;
+}
+
+.times {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.times button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007acc;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.times button:hover {
+    background-color: #005f99;
+}
+
+.times button:focus {
+    outline: 3px solid #ffa500;
+}

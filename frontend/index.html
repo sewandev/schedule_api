@@ -1,292 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <title>Reserva de Hora</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="background">
-        <div class="bar">
-            <div class="logo">
-                <div class="logo-api">
-                    <i class="fa-solid fa-dog"></i> test.api
-                </div>
-            </div>
-            <div class="buttons">
-                <div class="user-buttons">
-                    <a href=""><i class="fa-regular fa-handshake"></i>contact</a>
-                    <a href=""><i class="fa-regular fa-circle-question"></i>help</a>
-                </div>
-                <div class="user-alerts">
-                    <a href=""><i class="fa-regular fa-bell"></i></a>
-                </div>
-                <div class="user-login"></div>
-            </div>
+    <nav class="navbar">
+        <a href="#">Inicio</a>
+        <a href="#">Reserva de hora</a>
+        <a href="#">Mis Reservas</a>
+        <a href="#">Resultado de exámenes</a>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>Selecciona tu hora</h2>
+            <p>Semana desde el <strong>14 al 20 de Febrero</strong></p>
         </div>
-        <div class="bar-calendary">
-            <div class="nav-bar">
-                <ul class="options">
-                    <li>
-                        <a href=""><i class="fa-solid fa-house"></i>Home</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa-solid fa-book"></i>Learn</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa-solid fa-users"></i>Contribute</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa-solid fa-heart-circle-check"></i>Sponsorship</a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa-solid fa-user"></i>Profile</a>
-                    </li>
-                </ul>
-                <ul class="help">                    
-                    <li>
-                        <a href="">FAQs</a>
-                    </li>
-                    <li>
-                        <a href="">Our Blog</a>
-                    </li>
-                    <li>
-                        <a href="">Contact Us</a>
-                    </li>
-                    <li>
-                        <a href="">Log Out</a>
-                    </li>
-                </ul>
+
+        <div class="calendar-container">
+            <div class="arrow" id="prev-week">&#9664;</div>
+            <div class="calendar">
+                <div class="day">Vie<br><strong>14</strong></div>
+                <div class="day active">Sáb<br><strong>15</strong></div>
+                <div class="day">Dom<br><strong>16</strong></div>
+                <div class="day">Lun<br><strong>17</strong></div>
+                <div class="day">Mar<br><strong>18</strong></div>
             </div>
-            <div class="calendary">
-                <div class="working-hours">
-                    <div class="text">
-                        <h1>Working Hours</h1>
-                    </div>
-                    <div class="plus-icon">
-                        <a href=""><i class="fa-solid fa-square-plus"></i></a>
-                    </div>
-                </div>
-                <div class="month">
-                    <div class="text-week">
-                        <div class="text-day">
-                            <h1>SUN</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>MON</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>TUE</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>WED</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>THU</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>FRI</h1>
-                        </div>
-                        <div class="text-day">
-                            <h1>SAT</h1>
-                        </div>
-                    </div>
-                    <div class="week">
-                        <div class="day">
-                            <div class="number">
-                                1
-                            </div>
-                            <div class="task">
-                                9 a.m - 10 p.m
-                            </div>
-                            <div class="task">
-                                12 p.m - 1 p.m
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                2
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                3
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                4
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                5
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                6
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                7
-                            </div>
-                        </div>
-                    </div>
-                    <div class="week">
-                        <div class="day">
-                            <div class="number">
-                                8
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                9
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                10
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                11
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                12
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                13
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                14
-                            </div>
-                        </div>
-                    </div>
-                    <div class="week">
-                        <div class="day">
-                            <div class="number">
-                                15
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                16
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                17
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                18
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                19
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                20
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                21
-                            </div>
-                        </div>
-                    </div>
-                    <div class="week">
-                        <div class="day">
-                            <div class="number">
-                                22
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                23
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                24
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                25
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                26
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                27
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                28
-                            </div>
-                        </div>
-                    </div>
-                    <div class="week">
-                        <div class="day">
-                            <div class="number">
-                                29
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                30
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                31
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                
-                            </div>
-                        </div>
-                        <div class="day">
-                            <div class="number">
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="arrow" id="next-week">&#9654;</div>
+        </div>
+
+        <div class="appointment">
+            <h3>Viernes 14 de Febrero</h3>
+            <p><strong>IntegraMédica Manquehue</strong><br>Las Condes - Región Metropolitana</p>
+
+            <p><strong>Marín Leiva Javiera Andrea</strong><br>Medicina General (Mayor a 15 años)</p>
+
+            <div class="times">
+                <button>07:30</button>
+                <button>07:42</button>
+                <button>07:54</button>
+                <button>08:06</button>
+                <button>08:18</button>
+                <button>08:42</button>
+                <button>08:54</button>
+                <button>09:18</button>
             </div>
         </div>
     </div>
+
+    <script src="js/script.js"></script>
 </body>
 </html>
