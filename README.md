@@ -29,25 +29,29 @@
 ## Arbol de carpetas actual
 
 ```bash
-├── 📁 app                        # Carpeta principal de la aplicación.
-│   ├── 📁 api                    # Contiene la lógica relacionada con la API.
-│   │   ├── 📁 endpoints           # Define los puntos de entrada (endpoints) de la API.
-│   │   │   ├── 📄 appointments.py # Endpoints específicos para gestionar citas (appointments).
-│   │   ├── 📄 routes.py           # Configura las rutas de la API.
-│   ├── 📁 core                   # Contiene configuraciones y componentes centrales de la aplicación.
-│   │   ├── 📄 config.py           # Archivo de configuración (variables de entorno, settings, etc.).
-│   │   ├── 📄 database.py         # Configuración y conexión a la base de datos.
-│   ├── 📁 models                 # Define los modelos de datos (entidades) de la aplicación.
-│   │   ├── 📄 models.py           # Modelos de la base de datos (por ejemplo, la tabla "appointments").
-│   ├── 📁 repositories           # Contiene la lógica para interactuar con la base de datos (CRUD).
-│   │   ├── 📄 appointments.py     # Operaciones específicas para la tabla de citas (appointments).
-│   ├── 📁 schemas                # Define esquemas de validación de datos (por ejemplo, con Pydantic).
-│   │   ├── 📄 appointments.py     # Esquemas para validar datos relacionados con citas.
-│   ├── 📁 services               # Contiene la lógica de negocio de la aplicación.
-│   │   ├── 📄 appointments.py     # Servicios relacionados con la gestión de citas.
-├── 📄 .env                       # Archivo de variables de entorno (credenciales, configuraciones sensibles).
-├── 📄 appointments.db            # Base de datos SQLite (o similar) para almacenar datos de citas.
-├── 📄 main.py                    # Punto de entrada de la aplicación (inicia el servidor o la app).
+📁 reserva-hora-api
+├── 📁 app
+│   ├── 📁 api
+│   │   ├── 📁 endpoints
+│   │   │   ├── 📄 appointments.py  # Controlador para gestionar las rutas relacionadas con las citas.
+│   │   │   ├── 📄 upload_schedules.py  # Controlador para gestionar las rutas relacionadas con la carga de horarios.
+│   │   ├── 📄 routes.py  # Registro centralizado de las rutas de la API.
+│   ├── 📁 core
+│   │   ├── 📄 config.py  # Configuración principal de la aplicación, incluidas variables de entorno.
+│   │   ├── 📄 database.py  # Configuración de la conexión a la base de datos usando SQLAlchemy.
+│   ├── 📁 models
+│   │   ├── 📄 models.py  # Definición de los modelos de datos con SQLAlchemy.
+│   ├── 📁 repositories
+│   │   ├── 📄 appointments.py  # Repositorio para la lógica de acceso y manipulación de datos de citas.
+│   │   ├── 📄 upload_schedules.py  # Repositorio para la lógica de acceso y manipulación de horarios.
+│   ├── 📁 schemas
+│   │   ├── 📄 appointments.py  # Esquemas de validación y serialización de datos relacionados con las citas (usando Pydantic).
+│   ├── 📁 services
+│   │   ├── 📄 appointments.py  # Lógica de negocio relacionada con las citas.
+│   │   ├── 📄 upload_schedules.py  # Lógica de negocio relacionada con la carga de horarios.
+├── 📄 .env  # Archivo para variables de entorno (e.g., configuración de base de datos, claves secretas).
+├── 📄 appointments.db  # Base de datos SQLite para desarrollo (migrable a PostgreSQL en producción).
+├── 📄 main.py  # Punto de entrada principal de la aplicación, inicia el servidor FastAPI y carga las rutas.
 ```
 
 ## Para realizar pruebas iniciales con [Postman](https://www.postman.com/downloads/) o [HTTPie](https://httpie.io/desktop)
