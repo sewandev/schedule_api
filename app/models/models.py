@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.core.database import Base
 
@@ -40,9 +40,10 @@ class Appointment(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     status: Mapped[str] = mapped_column(String(20), default="pending")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now().timestamp())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, onupdate=datetime.now().timestamp())
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())  # Usar func.now()
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())  # Usar func.now()
     
+    # Relaciones
     patient: Mapped["Patient"] = relationship(back_populates="appointments")
     medic: Mapped["Medic"] = relationship(back_populates="appointments")
 
@@ -54,7 +55,8 @@ class AvailableSlot(Base):
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)
     is_reserved: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now().timestamp())
-    updated_at: Mapped[datetime] = mapped_column(DateTime, onupdate=datetime.now().timestamp())
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())  # Usar func.now()
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())  # Usar func.now()
     
+    # Relación con el médico
     medic: Mapped["Medic"] = relationship(back_populates="available_slots")

@@ -11,18 +11,23 @@ class AppointmentRepository:
 
     # Propósito: Método asincrónico que crea una nueva cita en la base de datos -> Retorna: Un objeto de tipo Appointment que representa la cita creada.
     async def create(self, data: AppointmentCreate) -> Appointment:
+        print("Datos recibidos en el repositorio:")
+        print(f"patient_id: {data.patient_id}")
+        print(f"medic_id: {data.medic_id}")
+        print(f"start_time: {data.start_time}")
+        print(f"end_time: {data.end_time}")
 
         # Verifica si el slot de tiempo solicitado está disponible para el médico (medic_id) en el horario especificado.
         slot = await self.db.execute(
             select(AvailableSlot).where(
                 and_(
                     AvailableSlot.medic_id == data.medic_id,
-                    AvailableSlot.start_time == data.start_time,
-                    AvailableSlot.end_time == data.end_time,
-                    AvailableSlot.is_reserved == False
+                    AvailableSlot.start_time <= data.start_time,  # La hora de inicio debe ser mayor o igual al inicio del slot
+                    AvailableSlot.end_time >= data.end_time,  # La hora de fin debe ser menor o igual al fin del slot
+                    AvailableSlot.is_reserved == False  # El slot no debe estar reservado
                 )
             )
-            # SQL equivalente: SELECT * FROM available_slot WHERE medic_id = medic_id AND start_time = start_time AND end_time = end_time AND is_reserved = FALSE;
+            # SQL equivalente: SELECT * FROM available_slot WHERE medic_id = medic_id AND start_time <= start_time AND end_time >= end_time AND is_reserved = FALSE;
         )
         slot_result = slot.scalar()
         
@@ -38,8 +43,13 @@ class AppointmentRepository:
         slot_result.is_reserved = True
         
         # Guardar los cambios
-        await self.db.commit()
-        await self.db.refresh(new_appointment)
-
+        try:
+            await self.db.commit()
+            await self.db.refresh(new_appointment)
+        except Exception as e:
+            print(f"Error al realizar commit: {e}")
+            await self.db.rollback()  # Revierte la transacción en caso de error
+            raise
+        
         # Retorna los datos de la cita creada en la BD.
         return new_appointment

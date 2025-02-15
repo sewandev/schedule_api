@@ -18,39 +18,40 @@
             <div class="loc">
                 <div class="region">
                     <i class="fa-solid fa-location-dot"></i>
-                    <select name="region" id="option-1" required="">
-                        <option value="" disabled selected>Región</option>
-                        <option value="option-1">option 1</option>
-                        <option value="option-2">option 2</option>
+                    <select name="region" id="region" required="">
+                        <option value="" disabled selected>Selecciona una región</option>
                     </select>
                 </div>
                 <div class="comuna">
                     <i class="fa-solid fa-location-pin"></i>
-                    <select name="comuna" id="option-1" required="">
-                        <option value="" disabled selected>Comúna</option>
-                        <option value="option-1">option 1</option>
-                        <option value="option-2">option 2</option>
+                    <select name="comuna" id="comuna" disabled>
+                        <option value="" disabled selected>Selecciona una comuna</option>
                     </select>
                 </div>
                 <div class="area">                
                     <i class="fa-solid fa-briefcase"></i>
-                    <select name="area" id="option-1" required="">
+                    <select name="area" id="select-option" required="">
                         <option value="" disabled selected>Área</option>
-                        <option value="option-1">Kine</option>
-                        <option value="option-2">Med</option>
+                        <option value="1">Kine</option>
+                        <option value="2">Med</option>
                     </select>
                 </div>
                 <div class="especialidad">                               
                     <i class="fa-solid fa-stethoscope" required=""></i>
-                    <select name="especialidad" id="option-1">
+                    <select name="especialidad" id="select-option">
                         <option value="" disabled selected>Especialidad</option>
-                        <option value="option-1">option 1</option>
-                        <option value="option-2">option 2</option>
+                        <option value="1">option 1</option>
+                        <option value="2">option 2</option>
                     </select>
                 </div>
             </div>
-            <button class="send">buscar</i></button>
+            <!-- Botón Buscar -->
+            <button class="send"id="buscar">Buscar</button>
+
+            <!-- Resultado de la búsqueda -->
+            <div id="resultado"></div>
         </div>
     </div>
+    <script src="js/script-find-schedule.js"></script>
 </body>
 </html>

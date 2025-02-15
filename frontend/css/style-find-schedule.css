@@ -3,6 +3,7 @@ body{
     display: flex;
     justify-content: center;
     width: 100%;
+    background-color: #3f3e3e;
 }
 .background{
     background-color: #3f3e3e;
@@ -58,7 +59,7 @@ body{
     width: 100%;
     margin-top: 10px;
 }
-#option-1{
+#region, #comuna, #select-option{
     border: none;
     padding: 5px;
     border-radius: 10px;
