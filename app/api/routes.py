@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.endpoints import appointments, upload_schedules
+from app.api.v1.endpoints import appointments, upload_schedules
 
 api_router = APIRouter()
 

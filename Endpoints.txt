@@ -1,0 +1,71 @@
+1️⃣ Gestión de Horarios y Disponibilidad (/schedules)
+Estos endpoints manejan la disponibilidad de los médicos.
+
+GET /schedules/ → Listar la agenda de todos los médicos.
+📌 Permite a los pacientes ver la disponibilidad general de los médicos. Se usa GET porque solo se recupera información sin modificar datos.
+
+GET /schedules/{doctor_id} → Ver disponibilidad de un médico en particular.
+📌 Filtra la agenda para mostrar las horas disponibles de un solo médico. Se usa GET porque no cambia datos, solo consulta información.
+
+POST /schedules/ → Registrar disponibilidad de un médico.
+📌 Un médico o administrador define su horario disponible para citas. Se usa POST porque se está creando un nuevo recurso.
+
+PUT /schedules/{id} → Modificar disponibilidad de un médico.
+📌 Permite actualizar horarios (por ejemplo, si un médico cambia su jornada). Se usa PUT porque se actualiza un recurso existente.
+
+DELETE /schedules/{id} → Eliminar un horario disponible.
+📌 Se usa para borrar disponibilidad en caso de cambios o vacaciones del médico. Se usa DELETE porque elimina un recurso.
+
+_______________________________________________________________________________________________________________________
+
+
+2️⃣ Gestión de Citas Médicas (/appointments)
+Estos endpoints administran la reserva y control de citas.
+
+GET /appointments/ → Listar todas las citas médicas (según permisos).
+📌 Los médicos ven su agenda de citas y los pacientes pueden ver su historial de reservas. Se usa GET porque solo se consulta información.
+
+POST /appointments/ → Reservar una cita médica.
+📌 Un paciente elige un médico y un horario disponible para agendar una cita. Se usa POST porque se está creando un nuevo recurso.
+
+GET /appointments/{id} → Obtener detalles de una cita específica.
+📌 Permite a pacientes y médicos ver la información de una cita agendada. Se usa GET porque solo recupera información.
+
+PUT /appointments/{id} → Modificar una cita médica.
+📌 Permite a un paciente o administrador cambiar la fecha o datos de una cita. Se usa PUT porque se está actualizando un recurso existente.
+
+DELETE /appointments/{id} → Cancelar una cita médica.
+📌 Se usa cuando un paciente o médico necesita cancelar una cita agendada. Se usa DELETE porque elimina el recurso de la base de datos.
+
+_______________________________________________________________________________________________________________________
+
+
+3️⃣ Notificaciones y Recordatorios (/notifications)
+Estos endpoints permiten gestionar alertas y recordatorios para mejorar la asistencia.
+
+POST /notifications/ → Enviar notificaciones a usuarios.
+📌 Se usa para enviar correos, SMS o notificaciones push recordando citas. Se usa POST porque crea un nuevo evento de notificación.
+
+GET /notifications/ → Listar notificaciones del usuario.
+📌 Permite ver el historial de notificaciones recibidas. Se usa GET porque solo consulta información.
+
+PUT /notifications/{id}/read → Marcar notificación como leída.
+📌 Permite que el usuario indique que ha visto una notificación. Se usa PUT porque actualiza un estado existente.
+
+_______________________________________________________________________________________________________________________
+
+
+4️⃣ Historial Médico y Documentación (/records)
+Estos endpoints administran la información clínica del paciente.
+
+GET /records/{patient_id} → Obtener historial médico de un paciente.
+📌 Los médicos pueden acceder al historial clínico antes de una consulta. Se usa GET porque solo se recupera información.
+
+POST /records/ → Crear un nuevo registro médico.
+📌 Un médico puede registrar diagnósticos, recetas o resultados de exámenes. Se usa POST porque se crea un nuevo registro.
+
+PUT /records/{id} → Modificar un registro médico existente.
+📌 Un médico puede corregir o actualizar un historial médico. Se usa PUT porque se está actualizando un recurso existente.
+
+DELETE /records/{id} → Eliminar un registro médico.
+📌 En caso de errores o datos incorrectos, se puede eliminar un registro médico. Se usa DELETE porque elimina un recurso.
