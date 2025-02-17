@@ -45,23 +45,24 @@ class UploadSchedulesService:
             df = pd.read_excel(BytesIO(file))
 
             # Verificar que el archivo tenga las columnas esperadas
-            required_columns = {"id", "medic_id", "start_time", "end_time"}
+            required_columns = {"medic_id", "start_time", "end_time"}
             if not required_columns.issubset(df.columns):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"Missing required columns. Expected: {required_columns}"
                 )
             
-            # Convertir las columnas de fecha a objetos datetime
-            df["start_time"] = pd.to_datetime(df["start_time"])
-            df["end_time"] = pd.to_datetime(df["end_time"])
+            # Convertir las columnas 'start_time' y 'end_time' a datetime
+            df['start_time'] = pd.to_datetime(df['start_time'], format='%d/%m/%Y %H:%M')
+            df['end_time'] = pd.to_datetime(df['end_time'], format='%d/%m/%Y %H:%M')
             
             # Procesar el DataFrame y guardar los datos en la base de datos
             for index, row in df.iterrows():
                 medic_id = row["medic_id"]
-                start_time = row["start_time"].to_pydatetime()  # Convertir a datetime de Python
-                end_time = row["end_time"].to_pydatetime()  # Convertir a datetime de Python
-                
+                start_time = row["start_time"].round("s").to_pydatetime()
+                end_time = row["end_time"].round("s").to_pydatetime()
+                print(f"start_time: {start_time}")
+                print(f"end_time: {end_time}")
                 # Crear el slot en la base de datos
                 await self.repo.create_slot(medic_id, start_time, end_time)
 

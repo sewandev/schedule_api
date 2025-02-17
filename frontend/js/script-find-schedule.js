@@ -73,15 +73,14 @@ regionSelect.addEventListener("change", function () {
 // Nueva función para realizar la solicitud fetch
 document.getElementById("buscar").addEventListener("click", function () {
     // Endpoint de la API
-    const url = "http://localhost:8000/api/v1/appointments/";
+    const url = "http://127.0.0.1:8000/api/v1/appointments/";
 
     // Datos JSON de prueba
     const jsonData = {
-        id: 1,
+        patient_id: 123,
         medic_id: 1,
-        start_time: "2025-02-13T09:00:00",
-        end_time: "2025-02-13T10:00:00",
-        is_reserved: false
+        start_time: "2025-02-26T09:40:00",
+        end_time: "2025-02-26T10:00:00"
     };
 
     // Encabezados

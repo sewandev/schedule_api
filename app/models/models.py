@@ -34,7 +34,7 @@ class Medic(Base):
 class Appointment(Base):
     __tablename__ = "appointments"
     
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     patient_id: Mapped[int] = mapped_column(ForeignKey("patients.id"))
     medic_id: Mapped[int] = mapped_column(ForeignKey("medics.id"))
     start_time: Mapped[datetime] = mapped_column(DateTime)
@@ -50,7 +50,7 @@ class Appointment(Base):
 class AvailableSlot(Base):
     __tablename__ = "available_slots"
     
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     medic_id: Mapped[int] = mapped_column(ForeignKey("medics.id"))
     start_time: Mapped[datetime] = mapped_column(DateTime)
     end_time: Mapped[datetime] = mapped_column(DateTime)

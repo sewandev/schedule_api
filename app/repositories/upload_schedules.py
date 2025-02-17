@@ -26,7 +26,17 @@ class UploadSchedulesRepository:
             created_at=datetime.now(),
             updated_at=datetime.now()
         )
+
         self.db.add(new_slot)
-        await self.db.commit()
-        await self.db.refresh(new_slot)
+
+        try:
+            await self.db.commit()
+            await self.db.refresh(new_slot)
+        except Exception as e:
+            print(f"Error al realizar commit: {e}")
+            await self.db.rollback()  # Revierte la transacción en caso de error
+            raise
+
         return new_slot
+    
+        
