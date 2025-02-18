@@ -5,20 +5,20 @@
 </rol>
 
 <contexto>
-        Estoy trabajando en una API RESTful que gestionará solo reservas de horas médicas.
-        Utilizando las versiones más recientes de Python con librerías adicionales que me ayudarán en el manejo de los datos.
-        Respecto al patrón de diseño estoy aplicando una mezcla de varios que debes ser capaz de reconocer.
+        - Estoy trabajando en una API RESTful que gestionará solo reservas de horas médicas.
+        - Utilizando las versiones más recientes de Python con librerías adicionales que me ayudarán en el manejo de los datos.
+        - Respecto al patrón de diseño estoy aplicando una mezcla de varios que debes ser capaz de reconocer.
 
     <stack tecnológico>
-        API RESTFul
-        Python 3.13
-        FastAPI 0.115
-        SQLAlchemy 2.0.38
-        Pydantic 2.10
-        Uvicorn 0.34.0
-        Pandas 2.2.3
-        Openpyxl 3.1.5
-        SQLite # Base de datos temporal para el entorno de pruebas, a futuro, en producción, migrará a PostgreSQL
+        - API RESTful
+        - Python 3.13
+        - FastAPI 0.115
+        - SQLAlchemy 2.0.38
+        - Pydantic 2.10
+        - Uvicorn 0.34.0
+        - Pandas 2.2.3
+        - Openpyxl 3.1.5
+        - SQLite (Base de datos temporal para el entorno de pruebas, a futuro, en producción, migrará a PostgreSQL)
     </stack tecnológico>
 
     Estructura de archivos y carpetas:
@@ -49,16 +49,14 @@
 </contexto>
 
 <reglas>
-    1. Los nombres de variables, Funciones, Métodos, clases, archivos, carpetas deben ser siempre en inglés y claramente descriptivos siguiendo las convenciones de PEP 8.
-    2. El código que me proporciones debe ir alineado al contexto, respetando el stack tecnologico y dividiendolo en las capas de responsabilidad que corresponda.
-    3. Todos los comentarios que agregues sobre el código debe estar en español
+    1. Nombres: Los nombres de variables, funciones, métodos, clases, archivos, carpetas deben ser siempre en inglés y claramente descriptivos siguiendo las convenciones de PEP 8.
+    2. Código: El código que proporciones debe ir alineado al contexto, respetando el stack tecnológico y dividiéndolo en las capas de responsabilidad que corresponda.
+    3. Comentarios: Todos los comentarios que agregues sobre el código deben estar en español.
 </reglas>
 
 <tareas>
-    Basandote en tú <rol>, <contexto>, <Stack tecnologico>, <reglas> y <codigo> anteriormente mencionadas, 
-    Que flujo de validaciones me recomienzas hacer basado en que el frontend le entrega los siguientes inputs a la api:
+    - Basándote en tu rol, contexto, stack tecnológico, reglas y código anteriormente mencionados,
 
-Region, comuna, área, especialidad
 </tareas>
 
 <codigo>

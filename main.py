@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.api.routes import api_router
+from app.seed_data import insert_seed_data
 
 # Decorador y método asincrónico que se encarga de crear las tablas de la BD cada vez que se inicia la aplicación
 @asynccontextmanager
@@ -11,6 +12,7 @@ async def lifespan(app: FastAPI):
     if settings.ENVIRONMENT == "development":
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            await insert_seed_data()
     yield
     
 # Creación de la aplicación FastAPI
