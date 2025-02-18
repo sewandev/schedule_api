@@ -4,15 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 from app.core.config import settings
 from app.api.routes import api_router
+from app.dummy_data import insert_dummy_data  # Importa la función de datos dummy
 
 # Decorador y método asincrónico que se encarga de crear las tablas de la BD cada vez que se inicia la aplicación
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)  # Asegura que las tablas existen
     if settings.ENVIRONMENT == "development":
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
+        await insert_dummy_data()  # Inserta datos ficticios solo en desarrollo
     yield
-    
+
 # Creación de la aplicación FastAPI
 app = FastAPI(
     title=settings.APP_TITLE,

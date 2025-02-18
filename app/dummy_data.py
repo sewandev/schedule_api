@@ -2,77 +2,38 @@ from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Me
 from app.core.database import AsyncSessionLocal
 from datetime import datetime, date
 from sqlalchemy import delete
-
 import asyncio
 
-async def horarios_disponibles():
+async def clear_tables(session):
+    """Elimina todos los datos de las tablas antes de insertar nuevos datos ficticios."""
+    try:
+        for table in [Appointment, AvailableSlot, Medic, Provincia, Comuna, Region, Area]:
+            await session.execute(delete(table))
+        await session.commit()
+        print("All tables have been cleared.")
+    except Exception as e:
+        await session.rollback()
+        print(f"Error clearing tables: {e}")
+
+async def insert_dummy_data():
+    """Inserta datos ficticios en la base de datos."""
     async with AsyncSessionLocal() as session:
         try:
-            # Datos ficticios para horarios disponibles (available_slots)
-            today = date.today()
-            horarios_data = [
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 9, 0), end_time=datetime(today.year, today.month, today.day, 10, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 10, 0), end_time=datetime(today.year, today.month, today.day, 11, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 11, 0), end_time=datetime(today.year, today.month, today.day, 12, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 12, 0), end_time=datetime(today.year, today.month, today.day, 13, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 13, 0), end_time=datetime(today.year, today.month, today.day, 14, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 15, 0), end_time=datetime(today.year, today.month, today.day, 16, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 16, 0), end_time=datetime(today.year, today.month, today.day, 17, 0)),
-                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, 17, 0), end_time=datetime(today.year, today.month, today.day, 18, 0)),
-            ]
+            await clear_tables(session)
+
+            # Insertar regiones
+            regions = [Region(id=1, name="Región Metropolitana de Santiago")]
+            session.add_all(regions)
             
-            for horario in horarios_data:
-                session.add(horario)
-
-            await session.commit()
-        except Exception as e:
-            await session.rollback()
-            print(f"An error occurred: {e}")
-        finally:
-            await session.close()
-
-async def medicos():
-    async with AsyncSessionLocal() as session:
-        try:
-            # Datos ficticios para medicos
-            medicos_data = [
-                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
-            ]
-            
-            for medico in medicos_data:
-                session.add(medico)
-
-            await session.commit()
-        except Exception as e:
-            await session.rollback()
-            print(f"An error occurred: {e}")
-        finally:
-            await session.close()
-        
-async def regiones_comunas_provincias():
-    async with AsyncSessionLocal() as session:
-        try:
-            # Datos ficticios para Region
-            regions_data = [
-                Region(id=1, name="Región Metropolitana de Santiago"),
-            ]
-            
-            for region in regions_data:
-                session.add(region)
-
-            # Datos ficticios para Provincia
-            provinces_data = [
+            # Insertar provincias
+            provinces = [
                 Provincia(id=1, name="Provincia de Santiago", region_id=1),
                 Provincia(id=2, name="Provincia de Cordillera", region_id=1),
             ]
-            
-            for province in provinces_data:
-                session.add(province)
+            session.add_all(provinces)
 
-            # Datos ficticios para Comuna
-            communes_data = [
+            # Insertar comunas
+            communes = [
                 Comuna(id=1, name="Santiago", province_id=1),
                 Comuna(id=2, name="Cerrillos", province_id=1),
                 Comuna(id=3, name="Cerro Navia", province_id=1),
@@ -109,50 +70,38 @@ async def regiones_comunas_provincias():
                 Comuna(id=34, name="Pirque", province_id=2),  # Cordillera
                 Comuna(id=35, name="San José de Maipo", province_id=2),  # Cordillera
             ]
-            
-            for commune in communes_data:
-                session.add(commune)
+            session.add_all(communes)
 
-            # Datos ficticios para Area
-            areas_data = [
+            # Insertar áreas médicas
+            areas = [
                 Area(id=1, name="Kinesiología"),
                 Area(id=2, name="Cardiología"),
                 Area(id=3, name="Fonoaudiología"),
-                # ... Añadir más áreas según sea necesario
             ]
-            
-            for area in areas_data:
-                session.add(area)
+            session.add_all(areas)
 
+            # Insertar médicos
+            medics = [
+                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
+            ]
+            session.add_all(medics)
+
+            # Insertar horarios disponibles
+            today = date.today()
+            slots = [
+                AvailableSlot(medic_id=1, start_time=datetime(today.year, today.month, today.day, hour, 0), 
+                              end_time=datetime(today.year, today.month, today.day, hour+1, 0))
+                for hour in range(9, 18)
+            ]
+            session.add_all(slots)
+            
             await session.commit()
+            print("Dummy data inserted successfully.")
         except Exception as e:
             await session.rollback()
-            print(f"An error occurred: {e}")
-        finally:
-            await session.close()
-
-async def main():
-    async with AsyncSessionLocal() as session:
-        try:
-            # Ahora sí estamos llamando a vaciar_tablas
-            await vaciar_tablas(session)
-            await regiones_comunas_provincias(session)
-            await horarios_disponibles(session)
-            await medicos(session)
-            await session.commit()
-            print("Datos ficticios insertados con éxito.")
-        except Exception as e:
-            await session.rollback()
-            print(f"An error occurred in main: {e}")
-            
-async def vaciar_tablas(session):
-    try:
-        for table in [Appointment, AvailableSlot, Medic, Comuna, Provincia, Region, Area]:
-            await session.execute(delete(table))
-        print("Todas las tablas han sido vaciadas.")
-    except Exception as e:
-        await session.rollback()
-        print(f"Error al vaciar tablas: {e}")
+            print(f"Error inserting dummy data: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(insert_dummy_data())
