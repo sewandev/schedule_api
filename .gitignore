@@ -1,5 +1,6 @@
 citas.db
 promptai.txt
+ArbolCarpetas.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__
@@ -190,3 +191,4 @@ Thumbs.db
 *.log
 appointments.db
 .vscode
+promptai.txt
