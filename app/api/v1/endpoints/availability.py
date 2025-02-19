@@ -17,12 +17,12 @@ router = APIRouter()
         500: {"description": "Internal server error"}
     }
 )
+
 async def check_availability(
-    region: int = Query(..., description="Region for the appointment"),
-    comuna: int = Query(..., description="Commune within the region"),
-    area: str = Query(..., description="Medical area"),
+    region: int = Query(..., description="Region ID for the appointment"),
+    comuna: int = Query(..., description="Commune ID within the region"),
+    area: int = Query(..., description="Medical area ID"),
     specialty: str = Query(..., description="Specialty within the medical area"),
     db: AsyncSession = Depends(get_db)
 ):
-    # Aquí se asume que `AvailabilityService.check_availability` toma los parámetros necesarios y la sesión de base de datos.
     return await AvailabilityService.check_availability(region, comuna, area, specialty, db)
