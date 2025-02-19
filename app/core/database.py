@@ -6,10 +6,12 @@ from typing import AsyncGenerator
 Base = declarative_base()
 
 engine = create_async_engine(
-    settings.DATABASE_URL,     # ← Ahora usa SQLAlchemy async
+    settings.DATABASE_URL,
     echo=settings.DATABASE_ECHO,
     pool_size=settings.DATABASE_POOL_SIZE,
-    max_overflow=settings.DATABASE_MAX_OVERFLOW
+    max_overflow=settings.DATABASE_MAX_OVERFLOW,
+    pool_pre_ping=True,
+    pool_recycle=3600
 )
 
 AsyncSessionLocal = sessionmaker(

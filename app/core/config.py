@@ -1,6 +1,6 @@
 from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn, RedisDsn, field_validator
-from typing import Optional, Union
+from pydantic import RedisDsn, field_validator
+from typing import Optional
 
 class Settings(BaseSettings):
     # Configuración general de la aplicación
@@ -20,11 +20,11 @@ class Settings(BaseSettings):
     CORS_EXPOSE_HEADERS: list[str] = ["Content-Disposition"]
     
     # Configuración de base de datos (Async SQLAlchemy)
-    DATABASE_URL: str = "sqlite+aiosqlite:///./appointments.db"
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/reserva_hora_api"
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
-    TEST_DATABASE_URL: str = "sqlite+aiosqlite:///./test_appointments.db"
+    TEST_DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/reserva_hora_api-test"
     TESTING: bool = False
     
     # Configuración de autenticación JWT
@@ -39,13 +39,6 @@ class Settings(BaseSettings):
     
     # Configuración de Redis (opcional para cache/eventos)
     REDIS_URL: Optional[RedisDsn] = "redis://localhost:6379/0"
-    
-    # Validación de URLs de base de datos
-    @field_validator("DATABASE_URL", "TEST_DATABASE_URL")
-    def validate_db_url(cls, v: str) -> str:
-        if "postgresql" in v and "asyncpg" not in v:
-            raise ValueError("Use asyncpg driver for PostgreSQL (postgresql+asyncpg://...)")
-        return v
 
     class Config:
         env_file = ".env"

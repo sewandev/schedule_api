@@ -11,7 +11,7 @@ from app.dummy_data import insert_dummy_data  # Importa la función de datos dum
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)  # Asegura que las tablas existen
-    if settings.ENVIRONMENT == "development":
+    if settings.ENVIRONMENT in ("development","production"): # Solo de forma momentanea
         await insert_dummy_data()  # Inserta datos ficticios solo en desarrollo
     yield
 
