@@ -1,6 +1,4 @@
-from pydantic_settings import BaseSettings
-from pydantic import RedisDsn, field_validator
-from typing import Optional
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # Configuración general de la aplicación
@@ -11,7 +9,6 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
     HOST: str = "0.0.0.0"
     PORT: int = 8000
-    DEBUG: bool = False
     
     # Configuración CORS
     CORS_ORIGINS: list[str] = ["*"]
@@ -19,31 +16,29 @@ class Settings(BaseSettings):
     CORS_HEADERS: list[str] = ["*"]
     CORS_EXPOSE_HEADERS: list[str] = ["Content-Disposition"]
     
-    # Configuración de base de datos (Async SQLAlchemy)
-    DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/reserva_hora_api"
+    # Configuración de base de datos
+    DB_USER: str
+    DB_PASSWORD: str
+    DB_HOST: str = "localhost"
+    DB_PORT: str = "5432"
+    DB_NAME: str = "reserva_hora_api"
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
-    TEST_DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/reserva_hora_api-test"
-    TESTING: bool = False
     
-    # Configuración de autenticación JWT
-    JWT_SECRET_KEY: str = "super-secret-key-change-in-production"
-    JWT_ALGORITHM: str = "HS256"
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    
-    # Configuración de logging
-    LOG_LEVEL: str = "INFO"
-    LOG_FORMAT: str = "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s"
-    LOG_FILE: Optional[str] = "app.log"
-    
-    # Configuración de Redis (opcional para cache/eventos)
-    REDIS_URL: Optional[RedisDsn] = "redis://localhost:6379/0"
+    @property
+    def DATABASE_URL(self) -> str:
+        """Construye la URL de la base de datos dinámicamente."""
+        return (
+            f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
+            f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        )
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env" if ENVIRONMENT == "development" else None,
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        extra="ignore"
+    )
 
-# Instancia singleton de configuración
 settings = Settings()

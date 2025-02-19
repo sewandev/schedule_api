@@ -1,19 +1,29 @@
 from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment
 from app.core.database import AsyncSessionLocal
 from datetime import datetime, date
-from sqlalchemy import delete
+from sqlalchemy import text
 import asyncio
 
 async def clear_tables(session):
-    """Elimina todos los datos de las tablas antes de insertar nuevos datos ficticios."""
     try:
-        for table in [Appointment, AvailableSlot, Medic, Provincia, Comuna, Region, Area]:
-            await session.execute(delete(table))
+        tables = [
+            Appointment.__tablename__,
+            AvailableSlot.__tablename__,
+            Medic.__tablename__,
+            Provincia.__tablename__,
+            Comuna.__tablename__,
+            Region.__tablename__,
+            Area.__tablename__
+        ]
+
+        truncate_query = text(f"TRUNCATE TABLE {', '.join(tables)} RESTART IDENTITY CASCADE;")
+        await session.execute(truncate_query)
         await session.commit()
-        print("All tables have been cleared.")
+        print("All tables have been truncated successfully.")
     except Exception as e:
         await session.rollback()
-        print(f"Error clearing tables: {e}")
+        print(f"Error truncating tables: {e}")
+        raise
 
 async def insert_dummy_data():
     """Inserta datos ficticios en la base de datos."""
