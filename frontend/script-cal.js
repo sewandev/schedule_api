@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
         slotsContainer.innerHTML = '';
 
         for (let i = 0; i < firstDay; i++) {
-            calendar.innerHTML += '<div class="day"></div>';
+            calendar.innerHTML += '<div class="day bg-white border p-2 text-center"></div>';
         }
 
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
-            dayElement.classList.add('day');
+            dayElement.classList.add('day', 'bg-white', 'border', 'p-2', 'text-center', 'cursor-pointer');
             dayElement.textContent = day;
             dayElement.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             calendar.appendChild(dayElement);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.day').forEach(day => {
             const dayDate = day.dataset.date;
             if (availableSlots.some(slot => slot.slots.some(s => s.start_time.startsWith(dayDate)))) {
-                day.classList.add('available');
+                day.classList.add('bg-green-100', 'hover:bg-green-200');
                 day.addEventListener('click', () => showSlots(dayDate, availableSlots));
             }
         });
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             medic.slots.forEach(slot => {
                 if (slot.start_time.startsWith(date)) {
                     const div = document.createElement('div');
-                    div.classList.add('slot');
+                    div.classList.add('slot', 'bg-blue-100', 'border', 'border-blue-200', 'p-2', 'mb-2');
                     div.textContent = `${new Date(slot.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(slot.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
                     slotsContainer.appendChild(div);
                 }
@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
-                // Aquí podrías mostrar un mensaje de error en la UI si quieres
             });
     }
 

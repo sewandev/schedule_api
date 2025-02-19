@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario de Disponibilidad</title>
-    <link rel="stylesheet" href="styles-cal.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div id="calendar"></div>
-    <div id="slots"></div>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+        <div id="slots" class="mt-4"></div>
+    </div>
     <script src="script-cal.js"></script>
 </body>
 </html>
