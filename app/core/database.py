@@ -6,6 +6,12 @@ from sqlalchemy.sql import text
 from app.core.config import settings
 from typing import AsyncGenerator
 import os
+import ssl
+
+# Si estamos en Vercel, configuramos SSL
+ssl_context = None
+if os.getenv("VERCEL"):
+    ssl_context = ssl.create_default_context()  # Crea contexto SSL por defecto
 
 # Configuración del logger
 logger = logging.getLogger("reserva-hora-api-db")
