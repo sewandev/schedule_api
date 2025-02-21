@@ -16,7 +16,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 # Handler para archivo
-log_dir = "logs"
+log_dir = "/tmp/logs" if os.getenv("VERCEL") else "logs"
 os.makedirs(log_dir, exist_ok=True)
 file_handler = RotatingFileHandler(
     filename=os.path.join(log_dir, "database.log"),
