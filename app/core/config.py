@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL(self) -> str:
         """Construye la URL de la base de datos dinámicamente, agregando sslmode=require en Vercel."""
-        ssl_mode = "?sslmode=require" if os.getenv("VERCEL") else ""
+        ssl_mode = "?sslmode=true" if os.getenv("VERCEL") else ""
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
             f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}{ssl_mode}"
