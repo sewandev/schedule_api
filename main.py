@@ -1,18 +1,32 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.database import engine, Base
+from app.core.database import engine, Base, logger as db_logger
 from app.core.config import settings
 from app.api.routes import api_router
-from app.dummy_data import insert_dummy_data  # Importa la función de datos dummy
+from app.dummy_data_generator import insert_dummy_data
+from app.models.models import Base
 
-# Decorador y método asincrónico que se encarga de crear las tablas de la BD cada vez que se inicia la aplicación
+app = FastAPI()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    db_logger.info("Iniciando lifespan: creación de tablas y datos dummy.")
+    
+    # Verifica las tablas registradas en Base.metadata
+    registered_tables = list(Base.metadata.tables.keys())
+    db_logger.info("Tablas registradas en Base.metadata antes de create_all: %s", registered_tables)
+    
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)  # Asegura que las tablas existen
-        await insert_dummy_data()  # Inserta datos ficticios
+        db_logger.info("Ejecutando Base.metadata.create_all para crear tablas.")
+        await conn.run_sync(Base.metadata.create_all)
+        await conn.commit()  # Commit explícito para asegurar que las tablas estén visibles
+        db_logger.info("Creación de tablas completada, procediendo a insertar datos dummy.")
+        await insert_dummy_data()
+    db_logger.info("Lifespan completado.")
     yield
+
+app = FastAPI(lifespan=lifespan)
 
 # Creación de la aplicación FastAPI
 app = FastAPI(
@@ -41,5 +55,4 @@ if __name__ == "__main__":
         "main:app",
         host=settings.HOST,
         port=settings.PORT,
-        reload=settings.DEBUG
     )

@@ -17,11 +17,11 @@ class Settings(BaseSettings):
     CORS_EXPOSE_HEADERS: list[str] = ["Content-Disposition"]
     
     # Configuración de base de datos
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_HOST: str = "localhost"
-    DB_PORT: str = "5432"
-    DB_NAME: str = "reserva_hora_api"
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: str = "5432"
+    POSTGRES_DB: str = "reserva_hora_api"
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
@@ -30,8 +30,8 @@ class Settings(BaseSettings):
     def DATABASE_URL(self) -> str:
         """Construye la URL de la base de datos dinámicamente."""
         return (
-            f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
-            f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+            f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
+            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
     model_config = SettingsConfigDict(
