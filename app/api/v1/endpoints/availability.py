@@ -35,12 +35,13 @@ async def check_availability(
         AvailabilityResponse: Respuesta con la disponibilidad encontrada.
     """
     try:
+        normalized_specialty = query.specialty.lower()
         result = await AvailabilityService.check_availability(
-            query.region, query.comuna, query.area, query.specialty, db
+            query.region, query.comuna, query.area, normalized_specialty, db
         )
         logger.info(
-            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s",
-            query.region, query.comuna, query.area
+            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s, specialty=%s",
+            query.region, query.comuna, query.area, normalized_specialty
         )
         return result
     except HTTPException as he:

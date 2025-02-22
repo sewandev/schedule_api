@@ -3,7 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.database import engine, Base
 from app.core.config import settings
-from app.core.logging_config import setup_logging, get_logger
+from app.core.logging_config import setup_logging, get_logger, LOG_DIR
+from fastapi.staticfiles import StaticFiles
 from app.api.routes import api_router
 from app.dummy_data_generator import insert_dummy_data
 
@@ -45,6 +46,9 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["Content-Disposition"]
 )
+
+# Montar la carpeta logs como archivos estáticos
+app.mount("/logs", StaticFiles(directory=LOG_DIR), name="logs")
 
 # Registrar todos los routers
 app.include_router(api_router, prefix=settings.API_PREFIX)
