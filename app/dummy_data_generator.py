@@ -1,34 +1,14 @@
-# app/dummy_data_generator.py
-
-import logging
-from logging.handlers import RotatingFileHandler
 from sqlalchemy import text, inspect
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError, ProgrammingError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime, date
 import asyncio
-import os
+from app.core.config import settings
 from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient
 from app.core.database import AsyncSessionLocal, engine
+from app.core.logging_config import setup_logging, get_logger
 
-# Configuración del logger
-logger = logging.getLogger("reserva-hora-api-dummy")
-logger.setLevel(logging.INFO)
-
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
-
-log_dir = "/tmp/logs" if os.getenv("VERCEL") else "logs"
-os.makedirs(log_dir, exist_ok=True)
-file_handler = RotatingFileHandler(
-    filename=os.path.join(log_dir, "dummy_data.log"),
-    maxBytes=10*1024*1024,
-    backupCount=5,
-    encoding="utf-8"
-)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
+logger = get_logger(__name__)
 
 async def check_tables_exist():
     """Verifica si todas las tablas esperadas existen en la base de datos."""

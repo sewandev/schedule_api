@@ -1,31 +1,13 @@
-import logging
 from logging.handlers import RotatingFileHandler
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from app.core.logging_config import setup_logging, get_logger
 from sqlalchemy.sql import text
 from app.core.config import settings
 from typing import AsyncGenerator
-import os
 
-# Configuración del logger
-logger = logging.getLogger("reserva-hora-api-db")
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler()
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
-# Handler para archivo
-log_dir = "/tmp/logs" if os.getenv("VERCEL") else "logs"
-os.makedirs(log_dir, exist_ok=True)
-file_handler = RotatingFileHandler(
-    filename=os.path.join(log_dir, "database.log"),
-    maxBytes=10*1024*1024,
-    backupCount=5,
-    encoding="utf-8"
-)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
+setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
+logger = get_logger(__name__)
 
 Base = declarative_base()
 

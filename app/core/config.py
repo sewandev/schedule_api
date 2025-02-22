@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     DATABASE_ECHO: bool = False
     DATABASE_POOL_SIZE: int = 5
     DATABASE_MAX_OVERFLOW: int = 10
+
+    # Logging
+    LOG_LEVEL: str = "INFO"
+    LOG_TO_FILE: bool = True
     
     @property
     def DATABASE_URL(self) -> str:
