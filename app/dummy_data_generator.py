@@ -130,9 +130,9 @@ async def insert_dummy_data():
 
             # Insertar médicos
             medics = [
-                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="Trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
             ]
             session.add_all(medics)
             await session.flush()

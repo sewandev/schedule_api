@@ -18,7 +18,7 @@ async def lifespan(app: FastAPI):
     
     # Verifica las tablas registradas en Base.metadata
     registered_tables = list(Base.metadata.tables.keys())
-    logger.info("Tablas registradas en Base.metadata antes de create_all: %s", registered_tables)
+    logger.debug("Tablas registradas en Base.metadata antes de create_all: %s", registered_tables)
     
     async with engine.begin() as conn:
         logger.info("Ejecutando Base.metadata.create_all para crear tablas.")

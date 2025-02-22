@@ -5,6 +5,7 @@ from app.core.logging_config import setup_logging, get_logger
 from sqlalchemy.sql import text
 from app.core.config import settings
 from typing import AsyncGenerator
+from fastapi import HTTPException
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)
@@ -12,7 +13,7 @@ logger = get_logger(__name__)
 Base = declarative_base()
 
 try:
-    logger.info("Inicializando motor de base de datos con URL: %s", settings.DATABASE_URL)
+    logger.debug("Inicializando motor de base de datos con URL: %s", settings.DATABASE_URL)
     engine = create_async_engine(
         settings.DATABASE_URL,
         echo=settings.DATABASE_ECHO,
@@ -43,7 +44,12 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
         await session.commit()
         logger.debug("Commit exitoso para la sesión: %s", id(session))
+    except HTTPException as he:
+        # No registrar HTTPException como error, simplemente propagarla
+        logger.debug("Excepción HTTP controlada en la sesión: %s", str(he))
+        raise  # Re-lanzar la excepción sin rollback ni logging de error
     except Exception as e:
+        # Solo registrar errores inesperados
         logger.error("Error en la sesión de base de datos: %s", str(e), exc_info=True)
         await session.rollback()
         raise

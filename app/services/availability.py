@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from app.repositories.availability import AvailabilityRepository
-from app.schemas.availability import AvailabilityResponse, AvailableSlot, MedicAvailability
+from app.schemas.availability import AvailabilityResponse, AvailableSlot, MedicAvailability, TimeRangeFilterEnum
 from app.core.logging_config import get_logger
 from collections import defaultdict
 
@@ -11,40 +11,29 @@ logger = get_logger(__name__)
 class AvailabilityService:
     @staticmethod
     async def check_availability(
-        region: int, comuna: int, area: int, specialty: str, db: AsyncSession
+        region: int, comuna: int, area: int, specialty: str, time_range_filter: TimeRangeFilterEnum, db: AsyncSession
     ) -> AvailabilityResponse:
-        """
-        Verifica la disponibilidad de citas médicas según región, comuna, área y especialidad.
-
-        Args:
-            region (int): ID de la región.
-            comuna (int): ID de la comuna.
-            area (int): ID del área médica.
-            specialty (str): Especialidad médica.
-            db (AsyncSession): Sesión de base de datos.
-
-        Returns:
-            AvailabilityResponse: Respuesta con los slots disponibles agrupados por médico.
-
-        Raises:
-            HTTPException: Si no hay datos disponibles o ocurre un error interno.
-        """
         repo = AvailabilityRepository(db)
         try:
-            # Consultar slots disponibles
+            # Consultar slots disponibles en la base de datos
             available_slots = await repo.get_available_slots(
-                region, comuna, area, specialty, is_reserved=False
+                region, comuna, area, specialty, time_range_filter, is_reserved=False
             )
 
-            # Verificar si hay resultados
+            # Manejar caso de lista vacía (no se encontraron resultados)
             if not available_slots:
-                logger.info(
-                    "No se encontraron slots disponibles para region=%s, comuna=%s, area=%s, specialty=%s",
-                    region, comuna, area, specialty
+                detail_message = (
+                    f"No se encontraron slots disponibles para la región {region}, comuna {comuna}, "
+                    f"área {area}, especialidad '{specialty}' y rango horario '{time_range_filter.value}'. "
+                    "Por favor, verifica los parámetros o intenta con otros filtros."
+                )
+                logger.debug(
+                    "No se encontraron slots disponibles para region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                    region, comuna, area, specialty, time_range_filter.value
                 )
                 raise HTTPException(
                     status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"No hay citas disponibles para la región {region}, comuna {comuna}, área {area} y especialidad {specialty}."
+                    detail=detail_message
                 )
 
             # Agrupar slots por médico
@@ -63,33 +52,33 @@ class AvailabilityService:
                 for medic_id, slots in medic_slots.items()
             ]
 
-            logger.info(
-                "Disponibilidad encontrada para %s médicos en region=%s, comuna=%s, area=%s, specialty=%s",
-                len(response_data), region, comuna, area, specialty
+            logger.debug(
+                "Disponibilidad encontrada para %s médicos en region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                len(response_data), region, comuna, area, specialty, time_range_filter.value
             )
             return AvailabilityResponse(available_slots=response_data)
 
         except HTTPException as he:
-            # Dejar que las excepciones HTTP (como 404) se propaguen
+            # Re-lanzar excepciones HTTP específicas (como el 404 anterior)
             raise he
         except NoResultFound:
-            # Manejo específico para consultas vacías en SQLAlchemy
-            logger.info(
-                "No se encontraron resultados en la base de datos para region=%s, comuna=%s, area=%s, specialty=%s",
-                region, comuna, area, specialty
+            # Capturar específicamente cuando SQLAlchemy no encuentra resultados
+            logger.debug(
+                "No se encontraron resultados en la base de datos para region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                region, comuna, area, specialty, time_range_filter.value
             )
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No se encontraron datos para la región {region}, comuna {comuna}, área {area} y especialidad {specialty}."
+                detail=f"No se encontraron datos para la región {region}, comuna {comuna}, área {area}, especialidad '{specialty}' y rango '{time_range_filter.value}'."
             )
         except Exception as e:
-            # Solo capturar errores reales del servidor
+            # Capturar cualquier otro error inesperado
             logger.critical(
                 "Error interno al consultar disponibilidad: %s",
                 str(e),
-                extra={"region": region, "comuna": comuna, "area": area, "specialty": specialty}
+                extra={"region": region, "comuna": comuna, "area": area, "specialty": specialty, "time_range": time_range_filter.value}
             )
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Error interno del servidor al verificar disponibilidad. Por favor, intenta de nuevo más tarde."
+                detail="Error interno del servidor al verificar disponibilidad."
             )

@@ -37,11 +37,11 @@ async def check_availability(
     try:
         normalized_specialty = query.specialty.lower()
         result = await AvailabilityService.check_availability(
-            query.region, query.comuna, query.area, normalized_specialty, db
+            query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter, db
         )
-        logger.info(
-            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s, specialty=%s",
-            query.region, query.comuna, query.area, normalized_specialty
+        logger.debug(
+            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s, specialty=%s, time_range_filter=%s",
+            query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter
         )
         return result
     except HTTPException as he:
