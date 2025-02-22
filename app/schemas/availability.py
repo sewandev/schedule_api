@@ -3,9 +3,9 @@ from typing import List
 
 # Modelo para los parámetros de entrada
 class AvailabilityQuery(BaseModel):
-    region: int = Field(..., ge=1, description="Region ID for the appointment")
-    comuna: int = Field(..., ge=1, description="Commune ID within the region")
-    area: int = Field(..., ge=1, description="Medical area ID")
+    region: int = Field(..., ge=1, le=999, description="Region ID for the appointment")
+    comuna: int = Field(..., ge=1, le=999, description="Commune ID within the region")
+    area: int = Field(..., ge=1, le=999, description="Medical area ID")
     specialty: str = Field(..., min_length=1, description="Specialty within the medical area")
 
     model_config = ConfigDict(
