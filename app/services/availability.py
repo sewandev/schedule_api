@@ -65,7 +65,7 @@ class AvailabilityService:
 
             logger.info(
                 "Disponibilidad encontrada para %s médicos en region=%s, comuna=%s, area=%s, specialty=%s",
-                len(response_data), region, comuna, area
+                len(response_data), region, comuna, area, specialty
             )
             return AvailabilityResponse(available_slots=response_data)
 

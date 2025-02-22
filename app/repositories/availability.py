@@ -38,8 +38,8 @@ class AvailabilityRepository:
             AND available_slots.is_reserved = %s;
         """
         logger.debug(
-            "Ejecutando consulta SQL: %s",
-            sql_query % (region, comuna, area, f"'{specialty}'", is_reserved)
+            "Ejecutando consulta SQL:\n" + sql_query,
+            region, comuna, area, f"'{specialty}'", is_reserved
         )
 
         result = await self.db.execute(stmt)
