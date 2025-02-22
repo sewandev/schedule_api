@@ -76,6 +76,8 @@ class Appointment(Base):
     
     patient: Mapped["Patient"] = relationship(back_populates="appointments")
     medic: Mapped["Medic"] = relationship(back_populates="appointments")
+    payment: Mapped["Payment"] = relationship(back_populates="appointment", uselist=False)
+    # uselist=False indica que es una relación 1:1 (una cita tiene un solo pago)
 
 class AvailableSlot(Base):
     __tablename__ = "available_slots"
@@ -89,3 +91,18 @@ class AvailableSlot(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
     
     medic: Mapped["Medic"] = relationship(back_populates="available_slots")
+
+class Payment(Base):
+    __tablename__ = "payments"
+    
+    # Campos de la tabla con tipado Mapped
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    appointment_id: Mapped[int] = mapped_column(ForeignKey("appointments.id"), nullable=False)
+    amount: Mapped[int] = mapped_column(Integer, nullable=False)  # Monto en CLP (sin decimales)
+    transbank_token: Mapped[str | None] = mapped_column(String(255), nullable=True)  # Token de Transbank
+    status: Mapped[str] = mapped_column(String(20), default="pending")  # pending, completed, failed
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
+    
+    # Relación con Appointment
+    appointment: Mapped["Appointment"] = relationship(back_populates="payment")

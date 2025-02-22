@@ -1,3 +1,4 @@
+# app/schemas/appointments.py
 from datetime import datetime
 from pydantic import BaseModel, field_validator, ValidationInfo
 
@@ -20,7 +21,7 @@ class AppointmentBase(BaseModel):
 class AppointmentCreate(AppointmentBase): 
     pass
 
-# Hereda los atributos de AppointmentBase necesarios la respuesta que entregará la API junto a otros atributos que suma la clase por si misma.
+# Hereda los atributos de AppointmentBase necesarios para la respuesta que entregará la API junto a otros atributos.
 class AppointmentResponse(AppointmentBase):
     id: int
     status: str
@@ -35,5 +36,42 @@ class AppointmentResponse(AppointmentBase):
                 "start_time": "2025-02-13T09:00:00",
                 "end_time": "2025-02-13T10:00:00",
                 "status": "pending"
+            }
+        }
+
+# Esquema para crear un nuevo pago asociado a una cita.
+class PaymentCreate(BaseModel):
+    appointment_id: int
+    amount: int
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "appointment_id": 1,
+                "amount": 10000
+            }
+        }
+
+# Esquema para la respuesta de un pago.
+class PaymentResponse(BaseModel):
+    id: int
+    appointment_id: int
+    amount: int
+    transbank_token: str | None
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+        json_schema_extra = {
+            "example": {
+                "id": 1,
+                "appointment_id": 1,
+                "amount": 10000,
+                "transbank_token": "abc123xyz",
+                "status": "pending",
+                "created_at": "2025-02-22T10:00:00",
+                "updated_at": "2025-02-22T10:00:00"
             }
         }

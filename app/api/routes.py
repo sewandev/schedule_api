@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import appointments, availability #, upload_schedules
+from app.api.v1.endpoints import appointments, availability, payments #, upload_schedules
 
 api_router = APIRouter()
 
@@ -8,6 +8,12 @@ api_router.include_router(
     availability.router,
     prefix="/availability/check",
     tags=["Check available appointments"]
+)
+
+api_router.include_router(
+    payments.router,
+    prefix="/payments",
+    tags=["payments"]
 )
 
 """
