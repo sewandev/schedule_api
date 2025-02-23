@@ -3,7 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime, date
 import asyncio
 from app.core.config import settings
-from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient
+from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
 from app.core.database import AsyncSessionLocal, engine
 from app.core.logging_config import setup_logging, get_logger
 
@@ -20,6 +20,7 @@ async def check_tables_exist():
         
         existing_tables = await conn.run_sync(sync_inspector)
         expected_tables = [
+            Payment.__tablename__,
             Appointment.__tablename__,
             AvailableSlot.__tablename__,
             Medic.__tablename__,
@@ -47,6 +48,7 @@ async def clear_tables(session):
     
     try:
         tables = [
+            Payment.__tablename__,
             Appointment.__tablename__,
             AvailableSlot.__tablename__,
             Medic.__tablename__,

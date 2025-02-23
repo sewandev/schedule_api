@@ -1,4 +1,3 @@
-# app/schemas/appointments.py
 from datetime import datetime
 from pydantic import BaseModel, field_validator, ValidationInfo
 
@@ -9,7 +8,6 @@ class AppointmentBase(BaseModel):
     start_time: datetime
     end_time: datetime
 
-    # Valida que la fecha de inicio sea anterior a la fecha de fin.
     @field_validator("end_time")
     def validate_times(cls, end_time: datetime, info: ValidationInfo) -> datetime:
         start_time = info.data.get("start_time")
@@ -17,11 +15,9 @@ class AppointmentBase(BaseModel):
             raise ValueError("End time must be after start time")
         return end_time
 
-# Hereda los atributos de AppointmentBase necesarios para crear una cita.
-class AppointmentCreate(AppointmentBase): 
+class AppointmentCreate(AppointmentBase):
     pass
 
-# Hereda los atributos de AppointmentBase necesarios para la respuesta que entregará la API junto a otros atributos.
 class AppointmentResponse(AppointmentBase):
     id: int
     status: str
@@ -39,7 +35,7 @@ class AppointmentResponse(AppointmentBase):
             }
         }
 
-# Esquema para crear un nuevo pago asociado a una cita.
+# Esquema para crear un nuevo pago.
 class PaymentCreate(BaseModel):
     appointment_id: int
     amount: int
@@ -52,12 +48,39 @@ class PaymentCreate(BaseModel):
             }
         }
 
-# Esquema para la respuesta de un pago.
+# Esquema para la respuesta al iniciar un pago.
+class PaymentInitResponse(BaseModel):
+    url: str
+    token: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "url": "https://webpay3g.transbank.cl/webpayserver/initTransaction",
+                "token": "abc123xyz"
+            }
+        }
+
+# Esquema para la respuesta al confirmar un pago.
+class PaymentCommitResponse(BaseModel):
+    status: str  # Ej: "approved", "rejected"
+    payment_id: int
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "status": "approved",
+                "payment_id": 1
+            }
+        }
+
+# Esquema para la respuesta detallada de un pago (útil para consultas futuras).
 class PaymentResponse(BaseModel):
     id: int
     appointment_id: int
     amount: int
     transbank_token: str | None
+    url: str | None
     status: str
     created_at: datetime
     updated_at: datetime
@@ -70,6 +93,7 @@ class PaymentResponse(BaseModel):
                 "appointment_id": 1,
                 "amount": 10000,
                 "transbank_token": "abc123xyz",
+                "url": "https://webpay3g.transbank.cl/webpayserver/initTransaction",
                 "status": "pending",
                 "created_at": "2025-02-22T10:00:00",
                 "updated_at": "2025-02-22T10:00:00"

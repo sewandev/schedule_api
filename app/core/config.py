@@ -8,9 +8,10 @@ class Settings(BaseSettings):
     APP_DESCRIPTION: str = "API for managing medical appointments and schedules"
     APP_VERSION: str = "1.0.0"
     API_PREFIX: str = "/api/v1"
-    HOST: str = "0.0.0.0"
-    PORT: int = 8000
-    
+    SERVER_BIND_HOST: str = "0.0.0.0"
+    SERVER_BIND_PORT: int = 8000
+    PAYMENT_REDIRECT_HOST: str = "localhost"  # Nuevo atributo para URLs externas
+
     # Configuración CORS
     CORS_ORIGINS: list[str] = ["*"]
     CORS_METHODS: list[str] = ["*"]
@@ -38,11 +39,9 @@ class Settings(BaseSettings):
     
     @property
     def DATABASE_URL(self) -> str:
-        """Construye la URL de la base de datos dinámicamente, agregando sslmode=require en Vercel."""
-        ssl_mode = "?sslmode=true" if os.getenv("VERCEL") else ""
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@"
-            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}{ssl_mode}"
+            f"{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
 
     model_config = SettingsConfigDict(
