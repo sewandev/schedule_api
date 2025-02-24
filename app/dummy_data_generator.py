@@ -1,6 +1,6 @@
 from sqlalchemy import text, inspect
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import asyncio
 from app.core.config import settings
 from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
@@ -145,10 +145,11 @@ async def insert_dummy_data():
             slots = [
                 AvailableSlot(
                     medic_id=1,
-                    start_time=datetime(today.year, today.month, today.day, hour, 0),
-                    end_time=datetime(today.year, today.month, today.day, hour+1, 0)
+                    start_time=datetime(today.year, today.month, today.day, hour, 0) + timedelta(days=day_offset),
+                    end_time=datetime(today.year, today.month, today.day, hour+1, 0) + timedelta(days=day_offset)
                 )
-                for hour in range(9, 18)
+                for day_offset in range(3)  # 0 = hoy, 1 = mañana, 2 = pasado mañana
+                for hour in range(9, 22)   # Horas de 9 a 21
             ]
             session.add_all(slots)
             await session.flush()

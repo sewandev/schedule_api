@@ -8,9 +8,9 @@ class Settings(BaseSettings):
     APP_DESCRIPTION: str = "API for managing medical appointments and schedules"
     APP_VERSION: str = "1.0.0"
     API_PREFIX: str = "/api/v1"
-    SERVER_BIND_HOST: str = "0.0.0.0"
-    SERVER_BIND_PORT: int = 8000
-    PAYMENT_REDIRECT_HOST: str = "localhost"  # Nuevo atributo para URLs externas
+    HOST: str = "0.0.0.0"
+    PORT: int = 8005
+    PAYMENT_REDIRECT_HOST: str = "localhost"  # URLs externas para redirección de pagos
 
     # Configuración CORS
     CORS_ORIGINS: list[str] = ["*"]
