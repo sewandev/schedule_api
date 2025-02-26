@@ -25,7 +25,7 @@ async def check_availability(
     db: AsyncSession = Depends(get_db)
 ) -> AvailabilityResponse:
     """
-    Consulta la disponibilidad de citas médicas según región, comuna, área y especialidad.
+    Consulta la disponibilidad de citas médicas según región, comuna, área, especialidad y rango horario.
 
     Args:
         query (AvailabilityQuery): Parámetros de consulta validados por Pydantic.
