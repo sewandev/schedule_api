@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchAvailability } from './lib/api';
-import { AvailabilityResponse } from './types'; // ¡Esto faltaba!
+import { AvailabilityResponse } from './types';
 import { UserAppointment } from './components/UserAppointment';
 
 function App() {
