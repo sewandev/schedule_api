@@ -47,7 +47,6 @@ class AvailabilityRepository:
         end_range = range_info["end"]
         next_cycle_limit = range_info["next_cycle"]
 
-        # Condiciones comunes
         base_conditions = [
             Medic.region_id == region,
             Medic.comuna_id == comuna,
@@ -56,7 +55,6 @@ class AvailabilityRepository:
             AvailableSlot.is_reserved == is_reserved
         ]
 
-        # Condición de tiempo
         time_condition = and_(
             func.cast(AvailableSlot.start_time, TIME) >= start_range,
             func.cast(AvailableSlot.end_time, TIME) <= end_range
@@ -86,20 +84,20 @@ class AvailabilityRepository:
             SELECT available_slots.id, available_slots.start_time, available_slots.end_time
             FROM available_slots
             JOIN medics ON medics.id = available_slots.medic_id
-            WHERE medics.region_id = %s
-            AND medics.comuna_id = %s
-            AND medics.area_id = %s
-            AND medics.specialty ILIKE %s
-            AND available_slots.is_reserved = %s
+            WHERE medics.region_id = {}
+            AND medics.comuna_id = {}
+            AND medics.area_id = {}
+            AND medics.specialty ILIKE '{}'
+            AND available_slots.is_reserved = {}
         """
         sql_query_time = (
-            "AND ((CAST(available_slots.start_time AS TIME) >= %s AND CAST(available_slots.end_time AS TIME) <= %s) "
-            "OR (CAST(available_slots.start_time AS TIME) >= %s AND CAST(available_slots.end_time AS TIME) < %s))"
+            "AND ((CAST(available_slots.start_time AS TIME) >= '{}' AND CAST(available_slots.end_time AS TIME) <= '{}') "
+            "OR (CAST(available_slots.start_time AS TIME) >= '{}' AND CAST(available_slots.end_time AS TIME) < '{}'))"
             if next_cycle_limit else
-            "AND CAST(available_slots.start_time AS TIME) >= %s "
-            "AND CAST(available_slots.end_time AS TIME) <= %s"
+            "AND CAST(available_slots.start_time AS TIME) >= '{}' "
+            "AND CAST(available_slots.end_time AS TIME) <= '{}'"
         )
-        sql_query = sql_query_base + sql_query_time
+        sql_query_template = sql_query_base + sql_query_time + "\n"
 
         log_params = (
             [region, comuna, area, specialty, is_reserved, start_range, end_range, start_range, next_cycle_limit]
@@ -107,12 +105,8 @@ class AvailabilityRepository:
             [region, comuna, area, specialty, is_reserved, start_range, end_range]
         )
 
-        # Corregir el logging desempaquetando los parámetros
-        logger.debug(
-            "Ejecutando consulta SQL:\n%s\nCon parámetros: %s",
-            sql_query,
-            str(log_params)
-        )
+        sql_query = sql_query_template.format(*log_params)
+        logger.debug("Ejecutando consulta SQL:\n%s", sql_query)
 
         result = await self.db.execute(stmt)
         return result.all()  # Retorna tuplas con (id, start_time, end_time)

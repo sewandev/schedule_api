@@ -12,35 +12,26 @@ logger = get_logger(__name__)
     "/",
     response_model=AvailabilityResponse,
     status_code=status.HTTP_200_OK,
-    summary="Check available appointments",
+    summary="Verifica la disponibilidad de horas médicas",
+    description="Consulta la disponibilidad de horas médicas según región, comuna, área, especialidad y rango horario.",
     responses={
-        200: {"description": "Returns available appointments based on input"},
-        400: {"description": "Invalid parameters provided"},
-        404: {"description": "No available appointments found for the specified criteria"},
-        500: {"description": "Internal server error"}
+        200: {"description": "Devuelve las citas disponibles según los datos ingresados"},
+        400: {"description": "Parámetros inválidos proporcionados"},
+        404: {"description": "No se encontraron citas disponibles para los criterios especificados"},
+        500: {"description": "Error interno del servidor"}
     }
 )
 async def check_availability(
     query: AvailabilityQuery = Depends(),
     db: AsyncSession = Depends(get_db)
 ) -> AvailabilityResponse:
-    """
-    Consulta la disponibilidad de citas médicas según región, comuna, área, especialidad y rango horario.
-
-    Args:
-        query (AvailabilityQuery): Parámetros de consulta validados por Pydantic.
-        db (AsyncSession): Sesión de base de datos inyectada.
-
-    Returns:
-        AvailabilityResponse: Respuesta con la disponibilidad encontrada.
-    """
     try:
         normalized_specialty = query.specialty.lower()
         result = await AvailabilityService.check_availability(
             query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter, db
         )
         logger.debug(
-            "Slots únicos encontrados para region=%s, comuna=%s, area=%s, specialty=%s, time_range_filter=%s",
+            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s, specialty=%s, time_range_filter=%s",
             query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter
         )
         return result

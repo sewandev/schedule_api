@@ -16,12 +16,10 @@ class AvailabilityService:
     ) -> AvailabilityResponse:
         repo = AvailabilityRepository(db)
         try:
-            # Consultar slots disponibles en la base de datos
             available_slots = await repo.get_available_slots(
                 region, comuna, area, specialty, time_range_filter, is_reserved=False
             )
 
-            # Manejar caso de lista vacía (no se encontraron resultados)
             if not available_slots:
                 detail_message = (
                     f"No se encontraron slots disponibles para la región {region}, comuna {comuna}, "
@@ -29,7 +27,7 @@ class AvailabilityService:
                     "Por favor, verifica los parámetros o intenta con otros filtros."
                 )
                 logger.debug(
-                    "No se encontraron slots disponibles para region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                    "No se encontraron horarios disponibles para region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
                     region, comuna, area, specialty, time_range_filter.value
                 )
                 raise HTTPException(
@@ -37,11 +35,13 @@ class AvailabilityService:
                     detail=detail_message
                 )
 
-            # Agrupar slots por rango horario (start_time, end_time) para eliminar duplicados
+            # Agrupa por rango horario (start_time, end_time) para eliminar duplicados
             slot_dict = defaultdict(list)
             for slot in available_slots:
                 time_key = (slot.start_time.isoformat(), slot.end_time.isoformat())
                 slot_dict[time_key].append(slot)
+
+            logger.debug("Slots agrupados por rango horario")
 
             # Seleccionar aleatoriamente un slot por rango horario único
             unique_slots = []
@@ -55,18 +55,15 @@ class AvailabilityService:
                     )
                 )
 
-            # Construir respuesta
             logger.debug(
-                "Disponibilidad encontrada: %s slots únicos en region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                "Disponibilidad encontrada: %s horarios únicos en region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
                 len(unique_slots), region, comuna, area, specialty, time_range_filter.value
             )
             return AvailabilityResponse(available_slots=unique_slots)
 
-        except HTTPException as he:
-            # Re-lanzar excepciones HTTP específicas (como el 404 anterior)
-            raise he
+        except HTTPException as e:
+            raise e
         except NoResultFound:
-            # Capturar específicamente cuando SQLAlchemy no encuentra resultados
             logger.debug(
                 "No se encontraron resultados en la base de datos para region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
                 region, comuna, area, specialty, time_range_filter.value
@@ -76,7 +73,6 @@ class AvailabilityService:
                 detail=f"No se encontraron datos para la región {region}, comuna {comuna}, área {area}, especialidad '{specialty}' y rango '{time_range_filter.value}'."
             )
         except Exception as e:
-            # Capturar cualquier otro error inesperado
             logger.critical(
                 "Error interno al consultar disponibilidad: %s",
                 str(e),

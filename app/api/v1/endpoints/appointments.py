@@ -10,21 +10,16 @@ router = APIRouter()
     "/",
     response_model=AppointmentResponse,
     status_code=201,
-    summary="Create new appointment",
+    summary="Crea una nueva cita.",
+    description="Crea una nueva cita en el sistema y depende de la disponibilidad de los médicos.",
     responses={
-        201: {"description": "Appointment created successfully"},
-        500: {"description": "Internal server error"}
+        201: {"description": "Cita agendada satisfactoriamente"},
+        500: {"description": "Error interno del servidor"}
     }
 )
+
 async def create_appointment(
     data: AppointmentCreate,
     db: AsyncSession = Depends(get_db)
 ):
-    """
-    ### Endpoint para enviar una solicitud de reserva de hora.
-
-    **Returns:**
-    - **201**: Cita agendada satisfactoriamente.
-    - **500**: Error interno del servidor.
-    """
     return await AppointmentService.create_appointment(data, db)

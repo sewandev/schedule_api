@@ -3,17 +3,16 @@ from app.api.v1.endpoints import appointments, availability, payments #, upload_
 
 api_router = APIRouter()
 
-# Configuración unificada del router
 api_router.include_router(
     availability.router,
     prefix="/availability/check",
-    tags=["Check available appointments"]
+    tags=["Agendamiento de citas médicas"]
 )
 
 api_router.include_router(
     appointments.router,
     prefix="/appointments",
-    tags=["Appointments Management"]
+    tags=["Agendamiento de citas médicas"]
 )
 
 """

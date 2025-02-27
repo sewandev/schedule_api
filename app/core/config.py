@@ -4,8 +4,8 @@ import os
 class Settings(BaseSettings):
     # Configuración general de la aplicación
     ENVIRONMENT: str = "development"
-    APP_TITLE: str = "Medical Appointments API"
-    APP_DESCRIPTION: str = "API for managing medical appointments and schedules"
+    APP_TITLE: str = "API Citas Médicas"
+    APP_DESCRIPTION: str = "API que administra citas médicas según disponibilidad de horas integrada con Transbank."
     APP_VERSION: str = "1.0.0"
     API_PREFIX: str = "/api/v1"
     HOST: str = "0.0.0.0"
