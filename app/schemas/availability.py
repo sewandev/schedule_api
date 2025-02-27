@@ -2,13 +2,11 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 from enum import Enum
 
-# Enumerador para los filtros de rango de tiempo
 class TimeRangeFilterEnum(str, Enum):
     MORNING = "morning"
     AFTERNOON = "afternoon"
     NIGHT = "night"
 
-# Modelo para los parámetros de entrada
 class AvailabilityQuery(BaseModel):
     region: int = Field(..., ge=1, le=999, description="Region ID for the appointment")
     comuna: int = Field(..., ge=1, le=999, description="Commune ID within the region")
@@ -17,13 +15,11 @@ class AvailabilityQuery(BaseModel):
     time_range_filter: TimeRangeFilterEnum = Field(..., description="Time range of the day")
 
     model_config = ConfigDict(
-        # Desactivar coerción automática de tipos
         strict=True
     )
 
-# Modelo para un slot disponible en la respuesta
 class AvailableSlot(BaseModel):
-    id: int  # Se agrega el ID del slot disponible
+    id: int
     start_time: str
     end_time: str
 
@@ -38,7 +34,6 @@ class AvailableSlot(BaseModel):
         }
     )
 
-# Modelo para la respuesta de disponibilidad
 class AvailabilityResponse(BaseModel):
     available_slots: List[AvailableSlot]
 
