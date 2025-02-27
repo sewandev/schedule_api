@@ -1,13 +1,13 @@
 from datetime import datetime
 from pydantic import BaseModel, field_validator, ValidationInfo
 
-# Clase base que contiene los atributos necesarios para crear una cita.
+# Clase base con los atributos mínimos para crear una cita
 class AppointmentBase(BaseModel):
     patient_id: int
-    medic_id: int
     start_time: datetime
     end_time: datetime
 
+    # Validación para asegurar que end_time sea posterior a start_time
     @field_validator("end_time")
     def validate_times(cls, end_time: datetime, info: ValidationInfo) -> datetime:
         start_time = info.data.get("start_time")
@@ -15,11 +15,14 @@ class AppointmentBase(BaseModel):
             raise ValueError("End time must be after start time")
         return end_time
 
+# Esquema para crear una cita, sin medic_id ya que se asignará en el backend
 class AppointmentCreate(AppointmentBase):
     pass
 
+# Esquema de respuesta que incluye medic_id y más detalles
 class AppointmentResponse(AppointmentBase):
     id: int
+    medic_id: int  # Se mantiene en la respuesta, asignado por el servicio
     status: str
 
     class Config:
@@ -35,7 +38,7 @@ class AppointmentResponse(AppointmentBase):
             }
         }
 
-# Esquema para crear un nuevo pago.
+# Esquema para crear un nuevo pago
 class PaymentCreate(BaseModel):
     appointment_id: int
     amount: int
@@ -48,7 +51,7 @@ class PaymentCreate(BaseModel):
             }
         }
 
-# Esquema para la respuesta al iniciar un pago.
+# Esquema para la respuesta al iniciar un pago
 class PaymentInitResponse(BaseModel):
     url: str
     token: str
@@ -61,7 +64,7 @@ class PaymentInitResponse(BaseModel):
             }
         }
 
-# Esquema para la respuesta al confirmar un pago.
+# Esquema para la respuesta al confirmar un pago
 class PaymentCommitResponse(BaseModel):
     status: str  # Ej: "approved", "rejected"
     payment_id: int
@@ -74,7 +77,7 @@ class PaymentCommitResponse(BaseModel):
             }
         }
 
-# Esquema para la respuesta detallada de un pago (útil para consultas futuras).
+# Esquema para la respuesta detallada de un pago
 class PaymentResponse(BaseModel):
     id: int
     appointment_id: int

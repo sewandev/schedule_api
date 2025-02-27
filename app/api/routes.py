@@ -11,9 +11,9 @@ api_router.include_router(
 )
 
 api_router.include_router(
-    payments.router,
-    prefix="/payments",
-    tags=["payments"]
+    appointments.router,
+    prefix="/appointments",
+    tags=["Appointments Management"]
 )
 
 """
@@ -24,8 +24,9 @@ api_router.include_router(
 )
 
 api_router.include_router(
-    appointments.router,
-    prefix="/appointments",
-    tags=["Appointments Management"]
+    payments.router,
+    prefix="/payments",
+    tags=["payments"]
 )
+
 """

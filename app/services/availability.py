@@ -2,9 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from sqlalchemy.exc import NoResultFound
 from app.repositories.availability import AvailabilityRepository
-from app.schemas.availability import AvailabilityResponse, AvailableSlot, MedicAvailability, TimeRangeFilterEnum
+from app.schemas.availability import AvailabilityResponse, AvailableSlot, TimeRangeFilterEnum
 from app.core.logging_config import get_logger
 from collections import defaultdict
+import random
 
 logger = get_logger(__name__)
 
@@ -36,27 +37,30 @@ class AvailabilityService:
                     detail=detail_message
                 )
 
-            # Agrupar slots por médico
-            medic_slots = defaultdict(list)
+            # Agrupar slots por rango horario (start_time, end_time) para eliminar duplicados
+            slot_dict = defaultdict(list)
             for slot in available_slots:
-                medic_slots[slot.medic_id].append(
+                time_key = (slot.start_time.isoformat(), slot.end_time.isoformat())
+                slot_dict[time_key].append(slot)
+
+            # Seleccionar aleatoriamente un slot por rango horario único
+            unique_slots = []
+            for time_key, slots in slot_dict.items():
+                selected_slot = random.choice(slots)  # Elegir un slot aleatorio si hay múltiples coincidencias
+                unique_slots.append(
                     AvailableSlot(
-                        start_time=slot.start_time.isoformat(),
-                        end_time=slot.end_time.isoformat()
+                        id=selected_slot.id,
+                        start_time=selected_slot.start_time.isoformat(),
+                        end_time=selected_slot.end_time.isoformat()
                     )
                 )
 
             # Construir respuesta
-            response_data = [
-                MedicAvailability(medic_id=medic_id, slots=slots)
-                for medic_id, slots in medic_slots.items()
-            ]
-
             logger.debug(
-                "Disponibilidad encontrada para %s médicos en region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
-                len(response_data), region, comuna, area, specialty, time_range_filter.value
+                "Disponibilidad encontrada: %s slots únicos en region=%s, comuna=%s, area=%s, specialty=%s, time_range=%s",
+                len(unique_slots), region, comuna, area, specialty, time_range_filter.value
             )
-            return AvailabilityResponse(available_slots=response_data)
+            return AvailabilityResponse(available_slots=unique_slots)
 
         except HTTPException as he:
             # Re-lanzar excepciones HTTP específicas (como el 404 anterior)

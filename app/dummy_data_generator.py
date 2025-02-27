@@ -140,17 +140,26 @@ async def insert_dummy_data():
             await session.flush()
             logger.debug("Médicos insertados: %s", [m.full_name for m in medics])
 
+            """
+            Genera datos ficticios para pruebas, incluyendo horarios disponibles repetidos para médicos.
+            """
             # Insertar horarios disponibles
-            today = date.today()
+            today = date.today()  # Fecha actual: 2025-02-26
+            medic_ids = [1, 2, 3]  # Médicos con IDs 1, 2 y 3
+            hours = range(9, 12)   # Horas de 9:00 a 12:00
+
             slots = [
                 AvailableSlot(
-                    medic_id=1,
-                    start_time=datetime(today.year, today.month, today.day, hour, 0) + timedelta(days=day_offset),
-                    end_time=datetime(today.year, today.month, today.day, hour+1, 0) + timedelta(days=day_offset)
+                    medic_id=medic_id,
+                    start_time=datetime(today.year, today.month, today.day, hour, 0)  + timedelta(days=day_offset),
+                    end_time=datetime(today.year, today.month, today.day, hour + 1, 0)  + timedelta(days=day_offset),
+                    is_reserved=False  # Asegurar que los slots estén disponibles
                 )
-                for day_offset in range(3)  # 0 = hoy, 1 = mañana, 2 = pasado mañana
-                for hour in range(9, 22)   # Horas de 9 a 21
+                for day_offset in range(3)
+                for medic_id in medic_ids          # Para cada médico
+                for hour in hours                  # Para cada hora de 9 a 12
             ]
+
             session.add_all(slots)
             await session.flush()
             logger.debug("Horarios disponibles insertados: %d slots", len(slots))

@@ -40,7 +40,7 @@ async def check_availability(
             query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter, db
         )
         logger.debug(
-            "Disponibilidad encontrada para region=%s, comuna=%s, area=%s, specialty=%s, time_range_filter=%s",
+            "Slots únicos encontrados para region=%s, comuna=%s, area=%s, specialty=%s, time_range_filter=%s",
             query.region, query.comuna, query.area, normalized_specialty, query.time_range_filter
         )
         return result

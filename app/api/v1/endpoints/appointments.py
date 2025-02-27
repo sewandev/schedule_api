@@ -13,7 +13,6 @@ router = APIRouter()
     summary="Create new appointment",
     responses={
         201: {"description": "Appointment created successfully"},
-        409: {"description": "Time slot not available"},
         500: {"description": "Internal server error"}
     }
 )
@@ -26,7 +25,6 @@ async def create_appointment(
 
     **Returns:**
     - **201**: Cita agendada satisfactoriamente.
-    - **409**: Cupo horario no disponible.
     - **500**: Error interno del servidor.
     """
     return await AppointmentService.create_appointment(data, db)

@@ -34,7 +34,7 @@ class AvailabilityRepository:
             is_reserved (bool): Filtrar por slots reservados o no.
 
         Returns:
-            list: Lista de slots disponibles.
+            list: Lista de slots disponibles con id, start_time y end_time.
         """
         # Definir rangos horarios con inicio, fin y límite del siguiente ciclo (si aplica)
         time_ranges = {
@@ -70,16 +70,20 @@ class AvailabilityRepository:
                 )
             )
 
-        # Construir la consulta
+        # Construir la consulta seleccionando solo id, start_time y end_time
         stmt = (
-            select(AvailableSlot)
+            select(
+                AvailableSlot.id,
+                AvailableSlot.start_time,
+                AvailableSlot.end_time
+            )
             .join(Medic, Medic.id == AvailableSlot.medic_id)
             .where(and_(*base_conditions, time_condition))
         )
 
         # Logging de la consulta
         sql_query_base = """
-            SELECT available_slots.*
+            SELECT available_slots.id, available_slots.start_time, available_slots.end_time
             FROM available_slots
             JOIN medics ON medics.id = available_slots.medic_id
             WHERE medics.region_id = %s
@@ -90,20 +94,25 @@ class AvailabilityRepository:
         """
         sql_query_time = (
             "AND ((CAST(available_slots.start_time AS TIME) >= %s AND CAST(available_slots.end_time AS TIME) <= %s) "
-            "OR (CAST(available_slots.start_time AS TIME) >= %s AND CAST(available_slots.end_time AS TIME) < %s));"
+            "OR (CAST(available_slots.start_time AS TIME) >= %s AND CAST(available_slots.end_time AS TIME) < %s))"
             if next_cycle_limit else
             "AND CAST(available_slots.start_time AS TIME) >= %s "
-            "AND CAST(available_slots.end_time AS TIME) <= %s;"
+            "AND CAST(available_slots.end_time AS TIME) <= %s"
         )
         sql_query = sql_query_base + sql_query_time
 
         log_params = (
-            [region, comuna, area, f"'{specialty}'", is_reserved, f"'{start_range}'", f"'{end_range}'", f"'{start_range}'", f"'{next_cycle_limit}'"]
+            [region, comuna, area, specialty, is_reserved, start_range, end_range, start_range, next_cycle_limit]
             if next_cycle_limit else
-            [region, comuna, area, f"'{specialty}'", is_reserved, f"'{start_range}'", f"'{end_range}'"]
+            [region, comuna, area, specialty, is_reserved, start_range, end_range]
         )
 
-        logger.debug("Ejecutando consulta SQL:\n" + sql_query + "\n", *log_params)
+        # Corregir el logging desempaquetando los parámetros
+        logger.debug(
+            "Ejecutando consulta SQL:\n%s\nCon parámetros: %s",
+            sql_query,
+            str(log_params)
+        )
 
         result = await self.db.execute(stmt)
-        return result.scalars().all()
+        return result.all()  # Retorna tuplas con (id, start_time, end_time)
