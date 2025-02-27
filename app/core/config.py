@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
     LOG_TO_FILE: bool = True
+    LOG_FILE_NAME: str = "reserva_hora_api.log"
+    LOG_FILE_ENCODING: str = "utf-8"
 
     # Configuración de Transbank TEST
     transbank_commerce_code: str = "597055555532"

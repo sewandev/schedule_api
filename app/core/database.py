@@ -38,18 +38,15 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
     session: AsyncSession = AsyncSessionLocal()
     try:
         logger.debug("Iniciando nueva sesión de base de datos: %s", id(session))
-        # Prueba de conexión básica al iniciar la sesión
         await session.execute(text("SELECT 1"))
         logger.debug("Conexión a la base de datos confirmada en la sesión: %s", id(session))
         yield session
         await session.commit()
         logger.debug("Commit exitoso para la sesión: %s", id(session))
-    except HTTPException as he:
-        # No registrar HTTPException como error, simplemente propagarla
-        logger.debug("Excepción HTTP controlada en la sesión: %s", str(he))
-        raise  # Re-lanzar la excepción sin rollback ni logging de error
+    except HTTPException as e:
+        logger.debug("Excepción HTTP controlada en la sesión: %s", str(e))
+        raise
     except Exception as e:
-        # Solo registrar errores inesperados
         logger.error("Error en la sesión de base de datos: %s", str(e), exc_info=True)
         await session.rollback()
         raise
