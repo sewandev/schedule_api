@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Calendar from './calendar';
+import GlobalConfig from '../../config/globalConfig';
 
 interface FormData {
   region: string;
@@ -45,7 +46,7 @@ const Formulario = () => {
       specialty: formData.specialty,
       time_range_filter: formData.time_range_filter,
     }).toString();
-    const url = `http://200.119.225.235:8005/api/v1/availability/check/?${queryParams}`;
+    const url = `${GlobalConfig.api.endpoints.availabilityCheck}?${queryParams}`;
 
     try {
       const response = await fetch(url, {

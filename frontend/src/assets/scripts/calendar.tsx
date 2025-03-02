@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCalendar, Day, Slot } from './calendarutils';
+import GlobalConfig from '../../config/globalConfig';
 
 interface CalendarProps {
   availableSlots: Slot[];
@@ -97,7 +98,7 @@ const Calendar: React.FC<CalendarProps> = ({ availableSlots }) => {
     const appointmentToSend = appointments[0];
 
     try {
-      const url = `http://200.119.225.235:8005/api/v1/appointments/`;
+      const url = GlobalConfig.api.endpoints.appointments;
       console.log('Datos enviados:', JSON.stringify(appointmentToSend, null, 2)); // Log para depurar
       const response = await fetch(url, {
         method: 'POST',
