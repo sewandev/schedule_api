@@ -2,6 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, field_validator, ValidationInfo
 
 class AppointmentBase(BaseModel):
+    id: int
     patient_id: int
     start_time: datetime
     end_time: datetime

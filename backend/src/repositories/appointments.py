@@ -1,46 +1,48 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import NoResultFound
-from sqlalchemy import select, and_
+from sqlalchemy import insert, select
 from src.models.models import Appointment, AvailableSlot
+from src.core.logging_config import get_logger, setup_logging
+from src.core.config import settings
 from src.schemas.appointments import AppointmentCreate
+
+setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
+logger = get_logger(__name__)
 
 class AppointmentRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
     async def create(self, data: AppointmentCreate) -> Appointment:
-        print("Datos recibidos en el repositorio:")
-        print(f"patient_id: {data.patient_id}")
-        print(f"medic_id: {data.medic_id}")
-        print(f"start_time: {data.start_time}")
-        print(f"end_time: {data.end_time}")
-
-        slot = await self.db.execute(
-            select(AvailableSlot).where(
-                and_(
-                    AvailableSlot.medic_id == data.medic_id,
-                    AvailableSlot.start_time <= data.start_time,
-                    AvailableSlot.end_time >= data.end_time,
-                    AvailableSlot.is_reserved == False  
-                )
-            )
-        )
-        slot_result = slot.scalar()
-        
-        if not slot_result:
-            raise NoResultFound("Slot not available")
-        
-        new_appointment = Appointment(**data.model_dump())
-        self.db.add(new_appointment)
-        
-        slot_result.is_reserved = True
-        
         try:
+            stmt_slot = select(AvailableSlot.medic_id).where(AvailableSlot.id == data.id)
+            logger.debug(f"SQL Query for slot: {str(stmt_slot)}")
+
+            slot = await self.db.execute(stmt_slot)
+            medic_id = slot.scalar_one_or_none()
+
+            if medic_id is None:
+                logger.error(f"No available slot found for id={data.id}")
+                raise ValueError("No available slot found")
+
+            stmt = insert(Appointment).values(
+                patient_id=data.patient_id,
+                medic_id=medic_id,
+                start_time=data.start_time,
+                end_time=data.end_time,
+                status="pending"
+            ).returning(Appointment)
+
+            logger.debug(f"SQL Query: {str(stmt)}")
+
+            result = await self.db.execute(stmt)
             await self.db.commit()
-            await self.db.refresh(new_appointment)
+
+            appointment = result.scalar_one()
+            await self.db.refresh(appointment)
+
+            return appointment
+
         except Exception as e:
-            print(f"Error al realizar commit: {e}")
+            logger.error(f"Error inserting appointment: {str(e)}")
             await self.db.rollback()
             raise
-
-        return new_appointment
