@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.models.models import AvailableSlot
+from src.models.models import AvailableSlot
 from datetime import datetime
 
 class UploadSchedulesRepository:

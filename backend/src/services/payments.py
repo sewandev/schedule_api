@@ -1,11 +1,11 @@
 from transbank.webpay.webpay_plus.transaction import Transaction, WebpayOptions
 from transbank.error.transbank_error import TransbankError
-from app.core.config import settings
-from app.repositories.payments import PaymentRepository
-from app.models.models import Payment
+from src.core.config import settings
+from src.repositories.payments import PaymentRepository
+from src.models.models import Payment
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.core.logging_config import get_logger, setup_logging
+from src.core.logging_config import get_logger, setup_logging
 
 # Configuración inicial de logging
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)

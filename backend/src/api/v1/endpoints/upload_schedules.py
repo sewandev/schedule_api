@@ -1,8 +1,8 @@
 # api/endpoints/upload_schedules.py
 from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.database import get_db
-from app.services.upload_schedules import UploadSchedulesService
+from src.core.database import get_db
+from src.services.upload_schedules import UploadSchedulesService
 
 # Router para upload_schedules
 router = APIRouter()

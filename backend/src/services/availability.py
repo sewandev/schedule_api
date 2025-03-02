@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from sqlalchemy.exc import NoResultFound
-from app.repositories.availability import AvailabilityRepository
-from app.schemas.availability import AvailabilityResponse, AvailableSlot, TimeRangeFilterEnum
-from app.core.logging_config import get_logger
+from src.repositories.availability import AvailabilityRepository
+from src.schemas.availability import AvailabilityResponse, AvailableSlot, TimeRangeFilterEnum
+from src.core.logging_config import get_logger
 from collections import defaultdict
 import random
 

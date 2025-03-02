@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import Integer, String, DateTime, ForeignKey, Boolean, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from app.core.database import Base
+from src.core.database import Base
 
 class Region(Base):
     __tablename__ = "regiones"

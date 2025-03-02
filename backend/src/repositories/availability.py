@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, func, TIME, or_
-from app.models.models import AvailableSlot, Medic
-from app.core.logging_config import get_logger, setup_logging
-from app.core.config import settings
-from app.schemas.availability import TimeRangeFilterEnum
+from src.models.models import AvailableSlot, Medic
+from src.core.logging_config import get_logger, setup_logging
+from src.core.config import settings
+from src.schemas.availability import TimeRangeFilterEnum
 from datetime import time
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)

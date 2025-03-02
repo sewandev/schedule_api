@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from sqlalchemy.exc import NoResultFound
-from app.repositories.appointments import AppointmentRepository
-from app.schemas.appointments import AppointmentCreate, AppointmentResponse
+from src.repositories.appointments import AppointmentRepository
+from src.schemas.appointments import AppointmentCreate, AppointmentResponse
 
 class AppointmentService:
     @staticmethod

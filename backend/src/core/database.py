@@ -1,9 +1,9 @@
 from logging.handlers import RotatingFileHandler
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from app.core.logging_config import setup_logging, get_logger
+from src.core.logging_config import setup_logging, get_logger
 from sqlalchemy.sql import text
-from app.core.config import settings
+from src.core.config import settings
 from typing import AsyncGenerator
 from fastapi import HTTPException
 

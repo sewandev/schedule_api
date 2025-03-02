@@ -2,11 +2,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.api.routes import api_router
-from app.core.config import settings
-from app.core.database import Base, engine
-from app.core.logging_config import get_logger, setup_logging, LOG_DIR
-from app.dummy_data_generator import insert_dummy_data
+from src.api.routes import api_router
+from src.core.config import settings
+from src.core.database import Base, engine
+from src.core.logging_config import get_logger, setup_logging, LOG_DIR
+from src.dummy_data_generator import insert_dummy_data
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)

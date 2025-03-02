@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 import pandas as pd
 from io import BytesIO
-from app.repositories.upload_schedules import UploadSchedulesRepository
+from src.repositories.upload_schedules import UploadSchedulesRepository
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
 

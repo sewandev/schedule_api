@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 from pathlib import Path
-from app.core.config import settings
+from src.core.config import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 LOG_DIR = BASE_DIR / "logs"

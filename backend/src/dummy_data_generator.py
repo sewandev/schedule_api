@@ -2,10 +2,10 @@ from sqlalchemy import text, inspect
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime, date, timedelta
 import asyncio
-from app.core.config import settings
-from app.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
-from app.core.database import AsyncSessionLocal, engine
-from app.core.logging_config import setup_logging, get_logger
+from src.core.config import settings
+from src.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
+from src.core.database import AsyncSessionLocal, engine
+from src.core.logging_config import setup_logging, get_logger
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)

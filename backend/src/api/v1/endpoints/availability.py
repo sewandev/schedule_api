@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.database import get_db
-from app.core.logging_config import get_logger
-from app.schemas.availability import AvailabilityQuery, AvailabilityResponse
-from app.services.availability import AvailabilityService
+from src.core.database import get_db
+from src.core.logging_config import get_logger
+from src.schemas.availability import AvailabilityQuery, AvailabilityResponse
+from src.services.availability import AvailabilityService
 
 router = APIRouter()
 logger = get_logger(__name__)

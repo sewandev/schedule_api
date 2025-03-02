@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas.appointments import AppointmentCreate, AppointmentResponse
-from app.services.appointments import AppointmentService
-from app.core.database import get_db
+from src.schemas.appointments import AppointmentCreate, AppointmentResponse
+from src.services.appointments import AppointmentService
+from src.core.database import get_db
 
 router = APIRouter()
 

@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.models.models import Payment
-from app.core.logging_config import get_logger, setup_logging
-from app.core.config import settings
+from src.models.models import Payment
+from src.core.logging_config import get_logger, setup_logging
+from src.core.config import settings
 
 # Configuración inicial de logging (global para el módulo)
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)

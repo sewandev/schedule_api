@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy import select, and_
-from app.models.models import Appointment, AvailableSlot
-from app.schemas.appointments import AppointmentCreate
+from src.models.models import Appointment, AvailableSlot
+from src.schemas.appointments import AppointmentCreate
 
 class AppointmentRepository:
     def __init__(self, db: AsyncSession):

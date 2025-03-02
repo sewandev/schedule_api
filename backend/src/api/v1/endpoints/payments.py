@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.database import get_db
-from app.core.logging_config import get_logger
-from app.core.config import settings
-from app.schemas.appointments import PaymentCreate, PaymentInitResponse, PaymentCommitResponse
-from app.services.payments import PaymentService
+from src.core.database import get_db
+from src.core.logging_config import get_logger
+from src.core.config import settings
+from src.schemas.appointments import PaymentCreate, PaymentInitResponse, PaymentCommitResponse
+from src.services.payments import PaymentService
 
 router = APIRouter()
 logger = get_logger(__name__)
