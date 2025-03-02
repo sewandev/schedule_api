@@ -1,0 +1,228 @@
+@import "tailwindcss";
+
+li{
+  padding: 12px 8px 12px 16px;
+  font-weight: bold;
+  margin: 3px 0;
+  border-radius: 10px;
+  list-style: none;
+}
+li:hover{
+  background-color: rgb(76, 175, 80, 0.14);
+}
+li i{
+  width: 20px;
+  margin-right: 17px;
+}
+.api-logo i{
+  margin-right: 5px;
+}
+.form-button i{
+  margin-right: 5px;
+}
+.form-button button{
+  padding: 12px;
+  cursor: pointer;
+}
+.month-year h3{
+  text-transform: capitalize;
+  font-size: 24px;
+  font-weight: bold
+}
+p{
+  font-weight: thin;
+  color: #737373;
+}
+.date-arrows i{
+  color: #737373;
+}
+.api .calendary .date .date-arrows .arrow-r i:hover, .arrow-l i:hover{
+  color: #3dc25f;
+}
+.user-img img{
+  width: 100%;
+  height: 100%;  
+  object-fit: cover;
+}
+.loc h3{
+  color: #3dc25f;
+}
+/* src/App.css */
+.day {
+  transition: all 0.3s ease;
+  background-color: #f2f2f2;
+  border: 1px solid #17331c4d; 
+}
+
+.day.active {
+  background-color: #cdedd5;
+  cursor: pointer;
+}
+
+.day.focus {
+  color: #3dc25f;  
+}
+.day.focus .number{
+  font-size: 18px;
+}
+.day:not(.active) {
+  opacity: 0.6;
+}
+.day.active:hover{
+  scale: 1.05;
+}
+.day.outside-month {
+  color: #999;
+  opacity: 0.5;
+}
+
+.arrow-l, .arrow-r {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.arrow-l:hover, .arrow-r:hover {
+  opacity: 0.7;
+}
+.day.available {
+  border: 1px solid #3dc25f;
+  box-shadow: inset 0 0 0 4px #3dc25f;
+}
+.available-hour {
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  position: fixed;
+  z-index: 1000;
+  top: 40%;
+  right: 40%;
+}
+.background-popup{
+  max-width: 1920px;
+  max-height: 1080px;
+  backdrop-filter: blur(5px);
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  width: fit-content;
+  align-items: center;
+}
+.popup-content h4{
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;  
+  padding-bottom: 20px;
+  border-bottom: 1px solid #17331c4d;
+}
+.popup-content select {
+  padding: 15px 10px;
+  font-size: 16px;  
+  text-align: center;
+  width: 100%;
+}
+.popup-content button {
+  padding: 5px 10px;
+  background: #3dc25f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.popup-content .onclick-buttons{
+  display: flex;
+  padding-top: 20px;
+  border-top: 1px solid #17331c4d;
+  width: 100%;
+  justify-content: space-between;
+}
+.popup-content .onclick-buttons .confirm{
+  background: #34a853;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 20px;
+  color: #fff;
+  width: 100%;
+  margin-right: 15px;  
+}
+.popup-content .onclick-buttons .cancel{
+  background: #ffffff;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 20px;
+  color: #17331c;
+  border: 1px solid #17331cbb;
+  width: 100%;
+  margin-left: 15px;
+}
+.popup-content .onclick-buttons .confirm:hover{
+  background: #216e35;
+}
+.popup-content .onclick-buttons .cancel:hover {
+  background: rgba(52, 168, 83, 0.15);
+}
+.schedule-button {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.schedule-button button {
+  padding: 8px 16px;
+  background: #3dc25f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.schedule-button button:hover {
+  background: #34a853;
+}
+
+.popup-content button {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background: #3dc25f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-content button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.popup-content button:hover:not(:disabled) {
+  background: #34a853;
+}
+.day .active .focus  .available
+{
+  font-weight: 400;
+  text-align: center;
+  font-size: 14px;
+}
+.form-button .find{
+  background: #ffffff;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 20px;
+  color: #17331c;
+  border: 1px solid #17331cbb;
+  width: 100%;
+  margin-left: 15px;
+}
+.form-button .find:hover{
+  background: rgba(52, 168, 83, 0.15);
+}
