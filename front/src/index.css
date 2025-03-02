@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@font-face {
+  font-family: Proxima-Nova;
+  src: url(../src/assets/fonts/ProximaNova-Regular.otf);
+}
+:root{
+  background-color: #f2f2f2;
+  font-family: Proxima-Nova;
+  color: #17331c;
+  max-width: 1920px;
+  max-height: 1080px;
+  height: 100%;
+}
+.api{ 
+  background-color: #fff;
+  width: 100%;
+  height: 100%;
+  display: flex;  
+}
+.api .left-panel-container {
+  max-width: 260px;
+  width: 100%;
+  margin-right: auto;
+}
+.api .left-panel-container .left-panel{
+  max-width: 260px;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  border-right: 1px solid #17331c4d; 
+  
+}
+.api .left-panel-container .left-panel .api-logo{
+  color: #4caf50;
+  padding: 20px;
+  font-size: 25px;
+}
+.api .left-panel-container .left-panel .container{
+  border-bottom: 1px solid #17331c4d; 
+}
+.api .left-panel-container .left-panel .bottom-container {
+  margin-top: auto;
+  padding-bottom: 20px;
+  border-top: 1px solid #17331c4d; 
+}
+.api .calendary{
+  max-width: 1200px;
+  width: 100%;
+  margin: 7px auto;
+  border: 1px solid #17331c4d; 
+  border-radius: 20px;
+  height: fit-content;
+}
+.api .calendary .head{
+  width: 100%;  
+  padding: 24px;
+}
+.api .calendary .head .head-container{
+  width: 100%;  
+  display: flex;
+  padding-bottom: 15px;
+}
+.api .calendary .head .head-container .tittles{
+  font-weight: bold;
+  margin-right: 54px;
+}
+.api .calendary .head .head-container select{
+  color: #3dc25f;
+  font-weight: 100;
+}
+.api .calendary .head .head-container select option{
+  font-family: Proxima-Nova;
+  font-size: 20px;
+}
+.api .calendary .head .form-button{
+  font-weight: bold;
+  width: fit-content;
+  border-radius: 15px;
+}
+.api .calendary .date{
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  border-top: 1px solid #17331c4d;
+  border-bottom: 1px solid #17331c4d;
+}
+.api .calendary .date .date-arrows{
+  display: flex;
+  margin-left: 15px;
+}
+.api .calendary .date .date-arrows .arrow-l{
+  padding: 18px 27px;
+  border: 1px solid #17331c4d; 
+  border-radius: 15px 0 0 15px;
+}
+.api .calendary .date .date-arrows .arrow-r{
+  padding: 18px 27px;
+  border: 1px solid #17331c4d; 
+  border-radius: 0 15px 15px 0;
+}
+.api .calendary .date .date-arrows .arrow-r:hover, .arrow-l:hover{
+  color: #3dc25f;
+}
+.api .calendary .month{
+  width: 100%;
+  color: #6e6e6e;
+  padding-bottom: 20px;
+}
+.api .calendary .month .text-week{
+  display: flex;
+  padding: 12px 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 16px;
+}
+.api .calendary .month .text-week .text-day{
+  width: 100%;
+}
+.api .calendary .month .week{
+  display: flex;
+}
+.api .calendary .month .week .day{
+  width: 100%;/* 170px */
+  height: 130px;/* 130px */
+  font-size: 13px;
+  font-weight: bold;
+  
+  padding: 10px;
+}
+
+.api .right-panel{
+  max-width: 260px;
+  width: 100%;
+  margin-left: auto;
+  border-left: 1px solid #17331c4d; 
+}
+.api .right-panel .panel{
+  width: 100%;
+  padding: 20px; 
+  height: 700px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 1px solid #17331c4d; 
+}
+.api .right-panel .panel .user .user-img{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: auto;
+  margin: 0 auto;
+  border: 3px solid #3dc25f; 
+}
+.api .right-panel .panel .container .text{
+  width: 100%;
+  text-transform: uppercase;
+  margin: 10px 0;
+  font-size: 12px;
+  padding: 0 8px 0 16px;
+}
+.api .right-panel .panel .user .info{
+  text-align: center;
+  padding: 0 10px;
+  padding: 20px 0;
+}
+.api .right-panel .panel .resource-container{
+  margin-top: auto;
+}
+.api .right-panel .panel .resource-container .text{
+  width: 100%;
+  text-transform: uppercase;
+  margin: 10px 0;
+  font-size: 12px;
+  padding: 0 8px 0 16px;
+}
