@@ -3,7 +3,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime, date, timedelta
 import asyncio
 from src.core.config import settings
-from src.models.models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
+from src.models.database_models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
 from src.core.database import AsyncSessionLocal, engine
 from src.core.logging_config import setup_logging, get_logger
 

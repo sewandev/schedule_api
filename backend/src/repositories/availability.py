@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, func, TIME, or_
-from src.models.models import AvailableSlot, Medic
+from src.models.database_models import AvailableSlot, Medic
 from src.core.logging_config import get_logger, setup_logging
 from src.core.config import settings
 from src.schemas.availability import TimeRangeFilterEnum

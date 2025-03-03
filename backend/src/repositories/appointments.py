@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
-from src.models.models import Appointment, AvailableSlot
+from src.models.database_models import Appointment, AvailableSlot
 from src.core.logging_config import get_logger, setup_logging
 from src.core.config import settings
 
