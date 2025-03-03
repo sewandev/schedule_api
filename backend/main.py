@@ -34,7 +34,7 @@ app = FastAPI(
     title=settings.APP_TITLE,
     description=settings.APP_DESCRIPTION,
     version=settings.APP_VERSION,
-    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1, "syntaxHighlight": {"theme": "obsidian"}},
     lifespan=lifespan
 )
 

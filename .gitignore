@@ -1,5 +1,6 @@
 citas.db
-promptai.txt
+backendPrompt.md
+frontendPrompt.md
 ArbolCarpetas.txt
 logs/
 
@@ -192,7 +193,6 @@ Thumbs.db
 *.log
 appointments.db
 .vscode
-promptai.txt
 
 # Logs
 logs
