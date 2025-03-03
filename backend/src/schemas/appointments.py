@@ -2,60 +2,39 @@ from datetime import datetime
 from pydantic import BaseModel, ValidationInfo, ConfigDict, Field, field_validator
 
 class AppointmentBase(BaseModel):
-    id: int = Field(..., ge=1, le=9999, description="Identificador único de la cita")
-    patient_id: int = Field(..., ge=1, le=9999, description="ID del paciente")
-    start_time: str = Field(..., description="Hora de inicio de la cita (debe ser futura y anterior a end_time)")
-    end_time: str = Field(..., description="Hora de fin de la cita (debe ser posterior a start_time)")
-
-    @field_validator("start_time")
-    @classmethod
-    def no_past_dates(cls, v: datetime) -> datetime:
-        """Valida que start_time no sea una fecha pasada."""
-        now = datetime.now()
-        if v < now:
-            raise ValueError("start_time no puede ser una fecha pasada")
-        return v
-
-    @field_validator("end_time")
-    @classmethod
-    def validate_times(cls, end_time: datetime, info: ValidationInfo) -> datetime:
-        """Valida que end_time sea una fecha posterior al start_time."""
-        start_time = info.data.get("start_time")
-        if start_time is not None and end_time <= start_time:
-            raise ValueError("End time must be after start time")
-        return end_time
+    patient_id: int = Field(..., description="ID del paciente")
 
 class AppointmentCreate(AppointmentBase):
+    id: int = Field(..., description="ID del slot disponible desde available_slots")
+
     model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [{"id": 1, "patient_id": 1}]
+        }
+    )
+
+class AppointmentResponse(AppointmentBase):
+    id: int = Field(..., description="ID único de la cita")
+    medic_id: int = Field(..., description="ID del médico")
+    start_time: datetime = Field(..., description="Hora de inicio")
+    end_time: datetime = Field(..., description="Hora de fin")
+    status: str = Field(..., description="Estado de la cita")
+
+    model_config = ConfigDict(
+        from_attributes=True,
         json_schema_extra={
             "examples": [
                 {
                     "id": 1,
                     "patient_id": 1,
+                    "medic_id": 1,
                     "start_time": "2025-03-03T09:00:00",
-                    "end_time": "2025-03-03T10:00:00"
+                    "end_time": "2025-03-03T10:00:00",
+                    "status": "pending"
                 }
             ]
         }
     )
-
-class AppointmentResponse(AppointmentBase):
-    id: int
-    medic_id: int
-    status: str
-
-    class Config:
-        from_attributes = True
-        json_schema_extra = {
-            "example": {
-                "id": 1,
-                "patient_id": 1,
-                "medic_id": 1,
-                "start_time": "2025-02-13T09:00:00",
-                "end_time": "2025-02-13T10:00:00",
-                "status": "pending"
-            }
-        }
 
 # Esquema para crear un nuevo pago
 class PaymentCreate(BaseModel):

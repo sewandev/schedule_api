@@ -76,15 +76,9 @@ const Calendar: React.FC<CalendarProps> = ({ availableSlots }) => {
           return null;
         }
 
-        // Añadir milisegundos al formato ISO
-        const startTimeWithMs = slot.start_time.includes('.') ? slot.start_time : `${slot.start_time}.000`;
-        const endTimeWithMs = slot.end_time.includes('.') ? slot.end_time : `${slot.end_time}.000`;
-
         return {
           id: slot.id, // Usar el ID original del slot en lugar de 0
-          patient_id: Math.floor(Math.random() * 2) + 1, // Random entre 1 y 10
-          start_time: startTimeWithMs, // Usar el start_time con milisegundos
-          end_time: endTimeWithMs, // Usar el end_time con milisegundos
+          patient_id: Math.floor(Math.random() * 2) + 1 // Random entre 1 y 10
         };
       }).filter(Boolean); // Filtrar nulls por si no se encuentra un slot
     });

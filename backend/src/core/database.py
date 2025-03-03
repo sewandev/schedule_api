@@ -31,7 +31,9 @@ except Exception as e:
 AsyncSessionLocal = sessionmaker(
     bind=engine,
     class_=AsyncSession,
-    expire_on_commit=False
+    expire_on_commit=False,
+    autocommit=False,
+    autoflush=False
 )
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
@@ -41,10 +43,9 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         await session.execute(text("SELECT 1"))
         logger.debug("Conexión a la base de datos confirmada en la sesión: %s", id(session))
         yield session
-        await session.commit()
-        logger.debug("Commit exitoso para la sesión: %s", id(session))
     except HTTPException as e:
         logger.debug("Excepción HTTP controlada en la sesión: %s", str(e))
+        await session.rollback()
         raise
     except Exception as e:
         logger.error("Error en la sesión de base de datos: %s", str(e), exc_info=True)
@@ -55,7 +56,6 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         logger.debug("Sesión cerrada correctamente: %s", id(session))
 
 async def test_connection():
-    """Función auxiliar para probar la conexión a la base de datos."""
     async with AsyncSessionLocal() as session:
         try:
             await session.execute(text("SELECT 1"))

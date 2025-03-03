@@ -1,48 +1,33 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import insert, select
+from sqlalchemy import select, update
 from src.models.models import Appointment, AvailableSlot
 from src.core.logging_config import get_logger, setup_logging
 from src.core.config import settings
-from src.schemas.appointments import AppointmentCreate
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)
 
 class AppointmentRepository:
-    def __init__(self, db: AsyncSession):
-        self.db = db
+    @staticmethod
+    async def get_available_slot(db: AsyncSession, slot_id: int) -> AvailableSlot:
+        query = select(AvailableSlot).where(AvailableSlot.id == slot_id).with_for_update()
+        sql_query = str(query.compile(compile_kwargs={"literal_binds": True}))
+        logger.debug("Ejecutando consulta SQL:\n%s", sql_query)
+        result = await db.execute(query)
+        slot = result.scalar_one_or_none()
+        logger.debug(f"Slot ID {slot_id} encontrado: {slot is not None}")
+        return slot
 
-    async def create(self, data: AppointmentCreate) -> Appointment:
-        try:
-            stmt_slot = select(AvailableSlot.medic_id).where(AvailableSlot.id == data.id)
-            logger.debug(f"SQL Query for slot: {str(stmt_slot)}")
+    @staticmethod
+    async def mark_slot_as_reserved(db: AsyncSession, slot_id: int):
+        query = update(AvailableSlot).where(AvailableSlot.id == slot_id).values(is_reserved=True)
+        await db.execute(query)
+        logger.debug(f"Slot ID {slot_id} marcado como reservado")
 
-            slot = await self.db.execute(stmt_slot)
-            medic_id = slot.scalar_one_or_none()
-
-            if medic_id is None:
-                logger.error(f"No available slot found for id={data.id}")
-                raise ValueError("No available slot found")
-
-            stmt = insert(Appointment).values(
-                patient_id=data.patient_id,
-                medic_id=medic_id,
-                start_time=data.start_time,
-                end_time=data.end_time,
-                status="pending"
-            ).returning(Appointment)
-
-            logger.debug(f"SQL Query: {str(stmt)}")
-
-            result = await self.db.execute(stmt)
-            await self.db.commit()
-
-            appointment = result.scalar_one()
-            await self.db.refresh(appointment)
-
-            return appointment
-
-        except Exception as e:
-            logger.error(f"Error inserting appointment: {str(e)}")
-            await self.db.rollback()
-            raise
+    @staticmethod
+    async def create(db: AsyncSession, data: dict) -> Appointment:
+        appointment = Appointment(**data)
+        db.add(appointment)
+        await db.flush()
+        logger.debug(f"Cita creada en DB con ID: {appointment.id}")
+        return appointment
