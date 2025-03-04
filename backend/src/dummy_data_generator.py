@@ -1,21 +1,19 @@
 from sqlalchemy import text, inspect
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from datetime import datetime, date, timedelta
-import asyncio
 from src.core.config import settings
-from src.models.database_models import Region, Provincia, Comuna, Area, AvailableSlot, Medic, Appointment, Patient, Payment
+from src.models.database_models import Region, Province, Commune, Area, AvailableSlot, Medic, Appointment, Patient, Payment
 from src.core.database import AsyncSessionLocal, engine
 from src.core.logging_config import setup_logging, get_logger
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)
 
-async def check_tables_exist():
-    """Verifica si todas las tablas esperadas existen en la base de datos."""
+async def check_tables_exist() -> bool:
     async with engine.connect() as conn:
         def sync_inspector(connection):
             inspector = inspect(connection)
-            # Forzar actualización del estado de las tablas
             return inspector.get_table_names(schema="public")
         
         existing_tables = await conn.run_sync(sync_inspector)
@@ -25,8 +23,8 @@ async def check_tables_exist():
             AvailableSlot.__tablename__,
             Medic.__tablename__,
             Patient.__tablename__,
-            Provincia.__tablename__,
-            Comuna.__tablename__,
+            Province.__tablename__,
+            Commune.__tablename__,
             Region.__tablename__,
             Area.__tablename__
         ]
@@ -38,8 +36,7 @@ async def check_tables_exist():
         logger.debug("Todas las tablas esperadas existen: %s", expected_tables)
         return True
 
-async def clear_tables(session):
-    """Trunca todas las tablas especificadas en la base de datos si existen."""
+async def clear_tables(session: AsyncSession) -> None:
     if not await check_tables_exist():
         raise RuntimeError(
             "No se pueden truncar las tablas porque algunas no existen. "
@@ -53,8 +50,8 @@ async def clear_tables(session):
             AvailableSlot.__tablename__,
             Medic.__tablename__,
             Patient.__tablename__,
-            Provincia.__tablename__,
-            Comuna.__tablename__,
+            Province.__tablename__,
+            Commune.__tablename__,
             Region.__tablename__,
             Area.__tablename__
         ]
@@ -76,8 +73,7 @@ async def clear_tables(session):
         await session.rollback()
         raise
 
-async def insert_dummy_data():
-    """Inserta datos ficticios en la base de datos para propósitos de desarrollo."""
+async def insert_dummy_data() -> None:
     async with AsyncSessionLocal() as session:
         logger.info("Iniciando inserción de datos ficticios.")
         try:
@@ -91,8 +87,8 @@ async def insert_dummy_data():
 
             # Insertar provincias
             provinces = [
-                Provincia(name="Provincia de Santiago", region_id=1),
-                Provincia(name="Provincia de Cordillera", region_id=1),
+                Province(name="Provincia de Santiago", region_id=1),
+                Province(name="Provincia de Cordillera", region_id=1),
             ]
             session.add_all(provinces)
             await session.flush()
@@ -100,12 +96,12 @@ async def insert_dummy_data():
 
             # Insertar comunas
             communes = [
-                Comuna(name="Santiago", province_id=1),
-                Comuna(name="Cerrillos", province_id=1),
-                Comuna(name="Cerro Navia", province_id=1),
-                Comuna(name="Conchalí", province_id=1),
-                Comuna(name="El Bosque", province_id=1),
-                Comuna(name="Estación Central", province_id=1),
+                Commune(name="Santiago", province_id=1),
+                Commune(name="Cerrillos", province_id=1),
+                Commune(name="Cerro Navia", province_id=1),
+                Commune(name="Conchalí", province_id=1),
+                Commune(name="El Bosque", province_id=1),
+                Commune(name="Estación Central", province_id=1),
             ]
             session.add_all(communes)
             await session.flush()
@@ -123,8 +119,8 @@ async def insert_dummy_data():
 
             # Insertar pacientes
             patients = [
-                Patient(full_name="Juan Pérez", email="juan.perez@example.com", region_id=1, comuna_id=1),
-                Patient(full_name="María López", email="maria.lopez@example.com", region_id=1, comuna_id=2),
+                Patient(full_name="Juan Pérez", email="juan.perez@example.com", region_id=1, commune_id=1),
+                Patient(full_name="María López", email="maria.lopez@example.com", region_id=1, commune_id=2),
             ]
             session.add_all(patients)
             await session.flush()
@@ -132,34 +128,30 @@ async def insert_dummy_data():
 
             # Insertar médicos
             medics = [
-                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
-                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="trauma", area_id=3, region_id=1, comuna_id=1),
+                Medic(id=1, full_name="Dr Mavencio Dota N00b", specialty="trauma", area_id=3, region_id=1, commune_id=1),
+                Medic(id=2, full_name="Dr SeWaN Oliva Ogre", specialty="trauma", area_id=3, region_id=1, commune_id=1),
+                Medic(id=3, full_name="Dra Pepe Julian Onzima", specialty="trauma", area_id=3, region_id=1, commune_id=1),
             ]
             session.add_all(medics)
             await session.flush()
             logger.debug("Médicos insertados: %s", [m.full_name for m in medics])
 
-            """
-            Genera datos ficticios para pruebas, incluyendo horarios disponibles repetidos para médicos.
-            """
             # Insertar horarios disponibles
-            today = date.today()  # Fecha actual: 2025-02-26
-            medic_ids = [1, 2, 3]  # Médicos con IDs 1, 2 y 3
-            hours = range(9, 12)   # Horas de 9:00 a 12:00
+            today = date.today()
+            medic_ids = [1, 2, 3]
+            hours = range(9, 12)
 
             slots = [
                 AvailableSlot(
                     medic_id=medic_id,
-                    start_time=datetime(today.year, today.month, today.day, hour, 0)  + timedelta(days=day_offset),
-                    end_time=datetime(today.year, today.month, today.day, hour + 1, 0)  + timedelta(days=day_offset),
-                    is_reserved=False  # Asegurar que los slots estén disponibles
+                    start_time=datetime(today.year, today.month, today.day, hour, 0) + timedelta(days=day_offset),
+                    end_time=datetime(today.year, today.month, today.day, hour + 1, 0) + timedelta(days=day_offset),
+                    is_reserved=False
                 )
                 for day_offset in range(3)
-                for medic_id in medic_ids          # Para cada médico
-                for hour in hours                  # Para cada hora de 9 a 12
+                for medic_id in medic_ids
+                for hour in hours
             ]
-
             session.add_all(slots)
             await session.flush()
             logger.debug("Horarios disponibles insertados: %d slots", len(slots))

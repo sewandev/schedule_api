@@ -41,7 +41,7 @@ const Formulario = () => {
     // Convertimos formData a un objeto compatible con URLSearchParams
     const queryParams = new URLSearchParams({
       region: formData.region,
-      comuna: formData.comuna,
+      commune: formData.comuna,
       area: formData.area,
       specialty: formData.specialty,
       time_range_filter: formData.time_range_filter,

@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, ValidationInfo, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 class AppointmentBase(BaseModel):
     patient_id: int = Field(..., description="ID del paciente")

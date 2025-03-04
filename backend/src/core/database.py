@@ -1,29 +1,27 @@
-from logging.handlers import RotatingFileHandler
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
 from src.core.logging_config import setup_logging, get_logger
 from sqlalchemy.sql import text
 from src.core.config import settings
+from src.models.database_models import Base
 from typing import AsyncGenerator
 from fastapi import HTTPException
 
 setup_logging(log_level=settings.LOG_LEVEL, log_to_file=settings.LOG_TO_FILE)
 logger = get_logger(__name__)
 
-Base = declarative_base()
-
 try:
     logger.debug("Inicializando motor de base de datos con URL: %s", settings.DATABASE_URL)
     engine = create_async_engine(
         settings.DATABASE_URL,
-        echo=settings.DATABASE_ECHO,
-        pool_size=settings.DATABASE_POOL_SIZE,
-        max_overflow=settings.DATABASE_MAX_OVERFLOW,
+        echo=settings.DB_ECHO,
+        pool_size=settings.DB_POOL_SIZE,
+        max_overflow=settings.DB_MAX_OVERFLOW,
         pool_pre_ping=True,
         pool_recycle=3600,
         pool_timeout=30
     )
-    logger.info("Motor de base de datos inicializado. La conexión se probará al usarlo.")
+    logger.info("Motor de base de datos inicializado correctamente.")
 except Exception as e:
     logger.critical("Error al inicializar el motor de base de datos: %s", str(e), exc_info=True)
     raise
@@ -55,7 +53,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         await session.close()
         logger.debug("Sesión cerrada correctamente: %s", id(session))
 
-async def test_connection():
+async def test_connection() -> None:
     async with AsyncSessionLocal() as session:
         try:
             await session.execute(text("SELECT 1"))
