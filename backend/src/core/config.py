@@ -31,8 +31,10 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = Field(default="INFO")
     LOG_TO_FILE: bool = Field(default=True)
-    LOG_FILE_NAME: str = Field(default="reserva_hora_api.log")
+    LOG_FILE_NAME: str = Field(default="schedules_api.log")
     LOG_FILE_ENCODING: str = Field(default="utf-8")
+    LOG_MAX_BYTES: int = Field(default=5 * 1024 * 1024)  # 5 MB
+    LOG_BACKUP_COUNT: int = Field(default=5)
 
     # Configuración de Transbank
     TBK_COMMERCE_CODE: str
