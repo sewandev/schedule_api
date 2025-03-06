@@ -1,12 +1,13 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 from src.api.routes import api_router
 from src.core.config import settings
 from src.core.database import engine
-from src.models.database_models import Base  # Importamos Base desde database_models
+from src.models.database_models import Base
 from src.core.logging_config import get_logger, setup_logging, LOG_DIR
 from src.dummy_data_generator import insert_dummy_data
 
@@ -40,6 +41,15 @@ app = FastAPI(
     swagger_ui_parameters={"defaultModelsExpandDepth": -1, "syntaxHighlight": {"theme": "obsidian"}},
     lifespan=lifespan
 )
+
+ALLOWED_IPS = {"186.79.236.112", "127.0.0.1"}
+
+@app.middleware("http")
+async def validate_ip(request: Request, call_next):
+    client_ip = request.client.host
+    if client_ip not in ALLOWED_IPS:
+        return JSONResponse(status_code=403, content={"detail": "IP no autorizada"})
+    return await call_next(request)
 
 app.add_middleware(
     CORSMiddleware,
