@@ -8,8 +8,8 @@
    ```bash
    git clone https://github.com/sewandev/reserva-hora-api.git
    cd reserva-hora-api
-   python -m venv venv # Opcional para crear un entorno virutal
-   venv\\Scripts\\activate  # Si se crea el entorno virtual, se debe activar
+   python -m venv venv
+   venv\\Scripts\\activate
    pip install -r requirements.txt
    ```
 
